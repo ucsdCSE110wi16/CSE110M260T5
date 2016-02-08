@@ -1,0 +1,59 @@
+Week 6:
+  UI Team:
+  - Create a barebones app
+    - Main menu screen is a list of active stocks
+    - Has the ability to create a new stock tracker
+      - Does not need to create an actual tracker until backend is implemented
+      - Can input stock name (not for this iteration), threshold for stock, and a confirm/cancel button
+    
+    
+    
+Week 7:
+  Backend Team:
+    - Start learning the API for the stock db
+    - Start coding the ability to import the data into the app
+      - Should at least connect to the database
+        - If possible, be able to 
+        
+  UI Team:
+    - Create the stock info screen
+      - Contains:
+        - Stock value graph
+          - Only needs the widget, doesn't need actual functionality yet
+        - Ability to input/change price thresholds
+          - Must have proper functionality
+        - Misc. information
+          - Nothing needs to be here, yet
+    - If backend team retrieves stock names, implement that into "Create New Stock" activity
+      - Activity now creates a stock with the proper name (does not yet have value information)
+
+    
+    
+Week 8: 
+  Backend Team:
+    - Finish the functionality of pulling information from the stock db
+      - Should have stock/ticker name, stock value, and value history (value history isn't as important)
+      
+  Both Teams:
+    - Start combining the backend functionality into the UI
+      - Should at least be able to create a new stock properly
+        - Searches for ticker name, 
+    - If possible, implement the threshold notification function
+      - User gets a push notification if the threshold exceeds the bottom/top baseline
+  
+
+
+Week 9: 
+  Both Teams:
+    - Finish the threshold notification function
+    - Implement the stock information graph functionality
+    
+  UI Team:
+    - Start making the app look pretty if possible
+      - Not a priority, finish any outstanding tasks first
+    
+    
+    
+Week 10:
+  Both Teams:
+    - Finish any miscellaneous tasks required

@@ -78,7 +78,31 @@
         android:id="@+id/upper$"
         android:layout_alignBottom="@+id/upperThresh"
         android:layout_toLeftOf="@+id/upperThresh"
+        android:layout_toStartOf="@+id/upperThresh"
         android:layout_alignLeft="@+id/low$"
         android:layout_alignStart="@+id/low$"
         android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifyTime"
+        android:entries="@array/incrementList"
+        android:background="#d7d4d4"
+        android:layout_marginTop="29dp"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/lowerThresh"
+        android:layout_alignLeft="@+id/lowerThresh"
+        android:layout_alignStart="@+id/lowerThresh"
+        android:layout_alignRight="@+id/lowerThresh"
+        android:layout_alignEnd="@+id/lowerThresh" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@android:drawable/arrow_down_float"
+        android:layout_alignTop="@+id/notifyTime"
+        android:layout_alignRight="@+id/notifyTime"
+        android:layout_alignEnd="@+id/notifyTime" />
 </RelativeLayout>

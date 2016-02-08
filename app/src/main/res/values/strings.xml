@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Project</string>
     <string name="title_activity_stock_screen">StockScreen</string>
+    <string name="title_activity_new_stock">NewStock</string>
 </resources>

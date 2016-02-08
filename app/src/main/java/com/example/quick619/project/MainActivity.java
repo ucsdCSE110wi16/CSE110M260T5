@@ -2,14 +2,19 @@ package com.example.quick619.project;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Button;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,16 +28,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ListView stockLV = (ListView) findViewById(R.id.stockList);
+        ArrayList<String> stockList = new ArrayList<String>();
+        stockList.add("Stock 1");
+        stockList.add("Stock 2");
+        stockList.add("Stock 3");
+        stockList.add("Stock 4");
+        ArrayAdapter<String> stockListAdapter=new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                stockList);
+        stockLV.setAdapter(stockListAdapter);
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+    }
+
+    public void listOnClick(View v) {
+        startActivity(new Intent(MainActivity.this, StockInformation.class));
     }
 
     public void buttonOnClick(View v) {
-        Button button = (Button) v;
-
-        startActivity(new Intent(MainActivity.this, StockScreen.class));
-
+        startActivity(new Intent(MainActivity.this, NewStock.class));
     }
 
     @Override

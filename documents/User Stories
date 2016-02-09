@@ -1,0 +1,37 @@
+User Stories - 
+
+ETA: 7 days	Priority: 10
+As a user
+I want to be able to add a stock to my portfolio
+So that I can see them all in one place
+
+ETA: 3 days	Priority: 20
+As a user
+I want to be able to set an upper and lower price limit
+So that I can react to price changes appropriately
+
+ETA: 5 days	Priority: 20
+As a user
+I want to be notified when my stock crosses the thresholds that I set
+So that I can react to price changes appropriately without having to constantly check my phone
+
+ETA: 3 days	Priority: 40
+As a user
+I want to be able to set an interval timer for how often the stocks are updated
+So that I can choose how often I want to receive updates and notifications
+
+ETA: 7 days	Priority: 50
+As a user
+I want the app to display a graph for my stock by clicking on the stock
+So that I can see price changes and trends
+
+ETA: 4 days   Priority: 40
+As user
+I want be able to edit or delete a stock by clicking an edit button
+So that I can change my portfolio appropriately
+
+ETA: 2 days	Priority: 50
+As a user
+I want my stocks to be ordered by least recent
+So that I can see the stocks nicely ordered
+

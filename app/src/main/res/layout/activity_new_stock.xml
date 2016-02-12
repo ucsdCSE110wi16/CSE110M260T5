@@ -23,4 +23,5 @@
 
     <include layout="@layout/content_new_stock" />
 
+
 </android.support.design.widget.CoordinatorLayout>

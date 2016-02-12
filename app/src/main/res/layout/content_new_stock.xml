@@ -15,25 +15,14 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/stockName"
-        android:editable="false"
-        android:hint="Stock Name"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/upperThresh"
         android:editable="false"
         android:hint="Top Baseline"
-        android:layout_below="@+id/stockName"
-        android:layout_alignLeft="@+id/stockName"
-        android:layout_alignStart="@+id/stockName" />
+        android:layout_below="@+id/searchView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -105,4 +94,19 @@
         android:layout_alignTop="@+id/notifyTime"
         android:layout_alignRight="@+id/notifyTime"
         android:layout_alignEnd="@+id/notifyTime" />
+
+    <SearchView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:queryHint="Stock Name"
+        android:background="#d7d4d4"
+        android:clickable="true"
+        android:contextClickable="false" />
+
 </RelativeLayout>

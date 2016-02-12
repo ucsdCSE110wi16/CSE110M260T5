@@ -37,14 +37,14 @@ public class NewStock extends AppCompatActivity {
     }
 
     public void makeNewStock(View v) {
-        final EditText editStockName = (EditText) findViewById(R.id.stockName);
-        String stockName = editStockName.getText().toString();
+        /*final EditText editStockName = (EditText) findViewById(R.id.stockName);
+        String stockName = editStockName.getText().toString();*/
 
         final EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
-        String upperThresh = editStockName.getText().toString();
+        String upperThresh = editUpperThresh.getText().toString();
 
         final EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
-        String lowerThresh = editStockName.getText().toString();
+        String lowerThresh = editLowerThresh.getText().toString();
 
         startActivity(new Intent(NewStock.this, MainActivity.class));
 ///        View view = findViewById(R.id.stockList);

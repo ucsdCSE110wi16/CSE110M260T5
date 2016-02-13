@@ -7,17 +7,17 @@ import yahoofinance.YahooFinance;
 
 public class getquote {
 
-	public static void main (String args[]) throws IOException
+	public double getprice (String symbol) throws IOException
 	{
+		Stock stock = YahooFinance.get(symbol);
 		
-		Stock stock = YahooFinance.get("INTC");
-		 
-		BigDecimal price = stock.getQuote().getPrice();
-		BigDecimal change = stock.getQuote().getChangeInPercent();
-		BigDecimal peg = stock.getStats().getPeg();
-		BigDecimal dividend = stock.getDividend().getAnnualYieldPercent();
-		 
-		stock.print();		
+		String name = stock.getName();
+		if(name.compareTo("N/A") == 0)
+			return -1;
+		
+		BigDecimal price_dec = stock.getQuote().getPrice();
+		Double price_dub = price_dec.doubleValue();
+		
+		return price_dub;
 	}
 }
-

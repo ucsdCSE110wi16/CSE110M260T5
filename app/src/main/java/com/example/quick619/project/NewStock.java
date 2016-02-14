@@ -33,6 +33,8 @@ public class NewStock extends AppCompatActivity {
         setContentView(R.layout.activity_new_stock);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
  //       stockListView.setAdapter(stockListAdapter);
     }
 
@@ -40,13 +42,23 @@ public class NewStock extends AppCompatActivity {
         /*final EditText editStockName = (EditText) findViewById(R.id.stockName);
         String stockName = editStockName.getText().toString();*/
 
+        String stockName = "fake";
+
         final EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
         String upperThresh = editUpperThresh.getText().toString();
 
         final EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
         String lowerThresh = editLowerThresh.getText().toString();
 
-        startActivity(new Intent(NewStock.this, MainActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("name", stockName);
+        intent.putExtra("upper", upperThresh);
+        intent.putExtra("lower", lowerThresh);
+
+        startActivity(intent);
+
+
+
 ///        View view = findViewById(R.id.stockList);
   //      Snackbar.make(view, "New stock tracker created", Snackbar.LENGTH_LONG)
   //              .setAction("Action", null).show();

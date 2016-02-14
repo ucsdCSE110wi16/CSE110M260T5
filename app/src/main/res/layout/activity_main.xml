@@ -12,7 +12,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+"
+        android:text="@string/button3"
         android:id="@+id/button3"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -30,6 +30,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
         android:layout_alignParentEnd="true"
         android:onClick="listOnClick"
         android:src="@android:drawable/ic_menu_edit"
-        android:background="#ececec" />
+        android:background="#ececec"
+        android:contentDescription="" />
 
 </RelativeLayout>

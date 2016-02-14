@@ -19,27 +19,31 @@
         android:layout_centerHorizontal="true"
         android:textSize="75dp" />
 
-    <EditText
+    <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:inputType="numberSigned"
         android:ems="10"
         android:id="@+id/upperThresh"
         android:hint="Bottom Baseline"
-        android:layout_alignTop="@+id/lowerThresh"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2" />
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:textColor="#f30b0b"
+        android:layout_below="@+id/lowerThresh"
+        android:layout_alignRight="@+id/lowerThresh"
+        android:layout_alignEnd="@+id/lowerThresh"
+        android:layout_marginTop="54dp" />
 
-    <EditText
+    <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:inputType="numberSigned"
         android:ems="10"
         android:id="@+id/lowerThresh"
         android:hint="Top Baseline"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
+        android:autoText="false"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_centerHorizontal="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -57,10 +61,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="$"
         android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/lowerThresh"
-        android:layout_alignRight="@+id/confirm"
-        android:layout_alignEnd="@+id/confirm"
-        android:layout_marginBottom="8dp" />
+        android:layout_alignTop="@+id/upperThresh"
+        android:layout_toLeftOf="@+id/upperThresh"
+        android:layout_toStartOf="@+id/upperThresh" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,6 +72,6 @@
         android:text="$"
         android:id="@+id/textView3"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
 </RelativeLayout>

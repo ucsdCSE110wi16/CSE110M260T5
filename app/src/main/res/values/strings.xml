@@ -12,6 +12,7 @@
     <string name="increment5">2 hours</string>
     <string name="increment6">1 day</string>
     <string name="increment7">1 week</string>
+    <string name="button3">+</string>
 
     <string-array name="incrementList">
         <item>@string/timerPrompt</item>

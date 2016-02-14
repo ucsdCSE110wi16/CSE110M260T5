@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private GoogleApiClient client;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         stockList.add("Stock 2");
         stockList.add("Stock 3");
         stockList.add("Stock 4");
+
+        if(getIntent().getExtras() !=null){
+            String text = getIntent().getStringExtra("name");
+            stockList.add(text);
+        }
+
         ArrayAdapter<String> stockListAdapter=new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -50,7 +57,12 @@ public class MainActivity extends AppCompatActivity {
         stockLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                startActivity(new Intent(MainActivity.this, StockInformation.class));
+                String upper = getIntent().getStringExtra("upper");
+                String lower = getIntent().getStringExtra("lower");
+                Intent intent = new Intent(MainActivity.this, StockInformation.class);
+                intent.putExtra("upper", upper);
+                intent.putExtra("lower", lower);
+                startActivity(intent);
             }
         });
 
@@ -66,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void buttonOnClick(View v) {
         startActivity(new Intent(MainActivity.this, NewStock.class));
+
     }
+
 
     @Override
     public void onStart() {

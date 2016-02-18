@@ -121,5 +121,16 @@
         android:textAlignment="center"
         android:textSize="50dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+/-"
+        android:id="@+id/curChange"
+        android:layout_below="@+id/curPrice"
+        android:layout_alignLeft="@+id/curPrice"
+        android:layout_alignRight="@+id/curPrice"
+        android:textSize="20dp"
+        android:textAlignment="center" />
+
 
 </RelativeLayout>

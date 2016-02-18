@@ -109,4 +109,17 @@
         android:clickable="true"
         android:contextClickable="false" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        android:id="@+id/curPrice"
+        android:layout_below="@+id/notifyTime"
+        android:layout_marginTop="60dp"
+        android:layout_toRightOf="@+id/low$"
+        android:layout_alignRight="@+id/notifyTime"
+        android:textAlignment="center"
+        android:textSize="50dp" />
+
+
 </RelativeLayout>

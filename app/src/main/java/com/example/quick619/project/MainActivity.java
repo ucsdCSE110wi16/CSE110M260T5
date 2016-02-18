@@ -1,21 +1,14 @@
 package com.example.quick619.project;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.os.StrictMode;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Button;
-import android.widget.PopupWindow;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -31,11 +24,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private GoogleApiClient client;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Necessary to access API database
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         ListView stockLV = (ListView) findViewById(R.id.stockList);
         ArrayList<String> stockList = new ArrayList<String>();
@@ -77,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buttonOnClick(View v) {
+
         startActivity(new Intent(MainActivity.this, NewStock.class));
 
     }

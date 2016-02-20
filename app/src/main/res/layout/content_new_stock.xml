@@ -132,5 +132,16 @@
         android:textSize="20dp"
         android:textAlignment="center" />
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchResults"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/lowerThresh"
+        android:layout_below="@+id/searchView"
+        android:background="#ffffff"
+        android:backgroundTint="#919191"
+        android:visibility="invisible" />
+
 
 </RelativeLayout>

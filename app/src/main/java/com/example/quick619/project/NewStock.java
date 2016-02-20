@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NewStock extends AppCompatActivity {
 
@@ -23,8 +28,16 @@ public class NewStock extends AppCompatActivity {
             stockList);
 */
 
+    SearchView search_view;    //Search view var
+    TextView text_price;    //Price text var
+    TextView text_change;  //Change text var
+    ListView search_results; //Search results var
+
     private static getquote my_quote = new getquote();  //Stock fetching class API
     String stock_name;                                  //Stores name of stock
+    String[] items;
+    ArrayList<String> listItems;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +45,57 @@ public class NewStock extends AppCompatActivity {
         setContentView(R.layout.activity_new_stock);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        SearchView search_view = (SearchView) findViewById(R.id.searchView);    //Search view var
-        final TextView text_price = (TextView) findViewById(R.id.curPrice);     //Price text var
-        final TextView text_change = (TextView) findViewById(R.id.curChange);   //Change text var
+
+        search_view = (SearchView) findViewById(R.id.searchView);
+        text_price = (TextView) findViewById(R.id.curPrice);
+        text_change = (TextView) findViewById(R.id.curChange);
+        search_results = (ListView) findViewById(R.id.searchResults);
+
+        initList();
+
+        //Listener for when user clicks on search bar
+        search_view.setOnSearchClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                search_results.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //Listener for when user closes search bar
+        search_view.setOnCloseListener(new SearchView.OnCloseListener() {
+
+            @Override
+            public boolean onClose() {
+                search_results.setVisibility(View.INVISIBLE);
+                return false;
+            }
+        });
+
 
         //Search view listener
         search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             //While the input is changing
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String s) {
+                if (s.toString().equals("")) {
+                    initList();
+                }
+                else {
+                    initList();
+                    searchItem(s.toString());
+                }
+
                 return false;
             }
 
             @Override
             //After the user submits text
             public boolean onQueryTextSubmit(String query) {
+
+                search_results.setVisibility(View.INVISIBLE);
 
                 double my_price = 0;    //store price
                 double my_change = 0;   //store change
@@ -62,29 +111,60 @@ public class NewStock extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 //Price will be < 0 if the stock doesn't exist
-                if(my_price < 0) {
+                if (my_price < 0) {
                     text_price.setText("Error");
                     text_change.setText("Error");
                 }
                 //Set the text fields for Price and Change
                 else
                     text_price.setText(Double.toString(my_price));
-                    text_change.setText(Double.toString(my_change));
+                text_change.setText(Double.toString(my_change));
 
                 //Set color of change text
-                if(my_change > 0)
+                if (my_change > 0)
                     text_change.setTextColor(Color.GREEN);
-                else if(my_change == 0)
+                else if (my_change == 0)
                     text_change.setTextColor(Color.GRAY);
                 else
                     text_change.setTextColor(Color.RED);
                 return false;
             }
-
         });
 
+        //Listener for when the user clicks on a search result
+        search_results.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String selectedFromList = String.valueOf(search_results.getItemAtPosition(position));
+                search_view.setQuery(selectedFromList, false);
+            }
+        });
 
  //       stockListView.setAdapter(stockListAdapter);
+    }
+
+    //Initialize the Search Results List
+    public void initList(){
+
+        items = new String[]{"AAPL", "AAP", "INTS", "HH"};
+        listItems = new ArrayList<String>(Arrays.asList(items));
+        adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.txtitem, listItems);
+        search_results.setAdapter(adapter);
+
+    }
+
+    //Update the Search Results list
+    public void searchItem (String txtToSearch) {
+        for (String item:items) {
+            if (!item.toLowerCase().contains(txtToSearch.toString().toLowerCase())) {
+                listItems.remove(item);
+            }
+
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void makeNewStock(View v) {

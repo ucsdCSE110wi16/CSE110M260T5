@@ -23,5 +23,5 @@
         <item>@string/increment5</item>
         <item>@string/increment6</item>
         <item>@string/increment7</item>
-</string-array>
+    </string-array>
 </resources>

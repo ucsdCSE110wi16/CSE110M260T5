@@ -1,4 +1,4 @@
-Week 6:
+Week 6: COMPLETE
   UI Team:
   - Create a barebones app
     - Main menu screen is a list of active stocks
@@ -8,7 +8,7 @@ Week 6:
     
     
     
-Week 7:
+Week 7: COMPLETE
   Backend Team:
     - Start learning the API for the stock db
     - Start coding the ability to import the data into the app
@@ -29,16 +29,19 @@ Week 7:
 
     
     
-Week 8: 
-  Backend Team:
+Week 8:
+  Backend Team:  COMPLETE
     - Finish the functionality of pulling information from the stock db
       - Should have stock/ticker name, stock value, and value history (value history isn't as important)
       
-  Both Teams:
-    - Start combining the backend functionality into the UI
-      - Should at least be able to create a new stock properly
-        - Searches for ticker name, 
-    - If possible, implement the threshold notification function
+  UI Team:
+    - Continue figuring out how to implement the graph                                     IN PROGRESS
+      
+  Both Teams: IN PROGRESS
+    - Start combining the backend functionality into the UI                                 COMPLETE
+      - Should at least be able to create a new stock properly                              IN PROGRESS
+      - Searches for ticker name, retrieves price                                           COMPLETE
+    - If possible, implement the threshold notification function                            IN PROGRESS
       - User gets a push notification if the threshold exceeds the bottom/top baseline
   
 
@@ -51,7 +54,6 @@ Week 9:
   UI Team:
     - Start making the app look pretty if possible
       - Not a priority, finish any outstanding tasks first
-    
     
     
 Week 10:

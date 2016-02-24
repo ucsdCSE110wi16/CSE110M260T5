@@ -87,6 +87,7 @@ public class NewStock extends AppCompatActivity {
             @Override
             //While the input is changing
             public boolean onQueryTextChange(String s) {
+                search_results.setVisibility(View.VISIBLE);
                 if (s.toString().equals("")) {
                     try {
                         initList(StockList);

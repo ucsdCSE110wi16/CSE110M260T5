@@ -1,6 +1,7 @@
 package com.example.quick619.project;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,10 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class NewStock extends AppCompatActivity {
 
@@ -28,16 +31,19 @@ public class NewStock extends AppCompatActivity {
             stockList);
 */
 
-    SearchView search_view;    //Search view var
-    TextView text_price;    //Price text var
-    TextView text_change;  //Change text var
-    ListView search_results; //Search results var
+    SearchView search_view;   //Search view var
+    TextView text_price;      //Price text var
+    TextView text_change;     //Change text var
+    ListView search_results;  //Search results var
 
+    String StockList = "/src/main/assets/112"; //Need to fix this
     private static getquote my_quote = new getquote();  //Stock fetching class API
     String stock_name;                                  //Stores name of stock
     String[] items;
     ArrayList<String> listItems;
     ArrayAdapter<String> adapter;
+    double my_price = 0;    //store price
+    double my_change = 0;   //store change
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +57,14 @@ public class NewStock extends AppCompatActivity {
         text_change = (TextView) findViewById(R.id.curChange);
         search_results = (ListView) findViewById(R.id.searchResults);
 
-        initList();
+        try {
+            initList(StockList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Listener for when user clicks on search bar
         search_view.setOnSearchClickListener(new View.OnClickListener() {
-
 
             @Override
             public void onClick(View v) {
@@ -80,11 +89,20 @@ public class NewStock extends AppCompatActivity {
             @Override
             //While the input is changing
             public boolean onQueryTextChange(String s) {
+                search_results.setVisibility(View.VISIBLE);
                 if (s.toString().equals("")) {
-                    initList();
+                    try {
+                        initList(StockList);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
-                    initList();
+                    try {
+                        initList(StockList);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     searchItem(s.toString());
                 }
 
@@ -96,9 +114,6 @@ public class NewStock extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
 
                 search_results.setVisibility(View.INVISIBLE);
-
-                double my_price = 0;    //store price
-                double my_change = 0;   //store change
 
                 //Store the stock name (in all caps)
                 stock_name = query.toUpperCase();
@@ -147,11 +162,26 @@ public class NewStock extends AppCompatActivity {
     }
 
     //Initialize the Search Results List
-    public void initList(){
+    public void initList (String pathname) throws IOException {
 
-        items = new String[]{"AAPL", "AAP", "INTS", "HH"};
-        listItems = new ArrayList<String>(Arrays.asList(items));
-        adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.txtitem, listItems);
+        AssetManager am = getAssets();
+        InputStream file = am.open("NASDAQ.txt");
+
+        Scanner scanner = new Scanner(file);
+        int index = 0;
+        items = new String[3114];
+
+        try {
+            while(scanner.hasNextLine()) {
+                items[index] = scanner.nextLine();
+                index++;
+            }
+        } finally {
+            scanner.close();
+        }
+
+        listItems = new ArrayList<>(Arrays.asList(items));
+        adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.txtitem, listItems);
         search_results.setAdapter(adapter);
 
     }
@@ -184,7 +214,12 @@ public class NewStock extends AppCompatActivity {
         intent.putExtra("upper", upperThresh);
         intent.putExtra("lower", lowerThresh);
 
+        //New intent info
+        intent.putExtra("price", Double.toString(my_price));
+        intent.putExtra("change", Double.toString(my_change));
+
         startActivity(intent);
+
 
 
 

@@ -42,6 +42,8 @@ public class NewStock extends AppCompatActivity {
     String[] items;
     ArrayList<String> listItems;
     ArrayAdapter<String> adapter;
+    double my_price = 0;    //store price
+    double my_change = 0;   //store change
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +114,6 @@ public class NewStock extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
 
                 search_results.setVisibility(View.INVISIBLE);
-
-                double my_price = 0;    //store price
-                double my_change = 0;   //store change
 
                 //Store the stock name (in all caps)
                 stock_name = query.toUpperCase();
@@ -214,6 +213,10 @@ public class NewStock extends AppCompatActivity {
         intent.putExtra("name", stock_name);    //Edited by Ty, using stock name from search query
         intent.putExtra("upper", upperThresh);
         intent.putExtra("lower", lowerThresh);
+
+        //New intent info
+        intent.putExtra("price", Double.toString(my_price));
+        intent.putExtra("change", Double.toString(my_change));
 
         startActivity(intent);
 

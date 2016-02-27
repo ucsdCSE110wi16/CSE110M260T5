@@ -7,7 +7,6 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.appindexing.Action;
@@ -33,8 +32,39 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+
+
+
+        //Potential New View and Adpater
         ListView stockLV = (ListView) findViewById(R.id.stockList);
-        ArrayList<String> stockList = new ArrayList<String>();
+        ArrayList<ActiveStock> stockList = GenerateTestStocks();
+
+        if(getIntent().getExtras() !=null){
+            String text = getIntent().getStringExtra("name");
+
+            ActiveStock sr1 = new ActiveStock();
+            sr1.setName(text);
+            sr1.setCityState("Price");
+            sr1.setPhone("Change");
+            stockList.add(sr1);
+        }
+
+        stockLV.setAdapter(new MyCustomBaseAdapter(this, stockList));
+        stockLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                String upper = getIntent().getStringExtra("upper");
+                String lower = getIntent().getStringExtra("lower");
+                Intent intent = new Intent(MainActivity.this, StockInformation.class);
+                intent.putExtra("upper", upper);
+                intent.putExtra("lower", lower);
+                startActivity(intent);
+            }
+        });
+
+        //SHOULD REMOVE THIS BECAUSE I REPLACED IT WITH A CUSTOM ADAPTER//
+        /*ArrayList<String> stockList = new ArrayList<String>();
+
         stockList.add("Stock 1");
         stockList.add("Stock 2");
         stockList.add("Stock 3");
@@ -60,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("lower", lower);
                 startActivity(intent);
             }
-        });
+        });*/
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -68,6 +98,38 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Input test Method
+    private ArrayList<ActiveStock> GenerateTestStocks(){
+
+        ArrayList<ActiveStock> results = new ArrayList<ActiveStock>();
+
+        ActiveStock sr1 = new ActiveStock();
+        sr1.setName("AAPL");
+        sr1.setCityState("Price");
+        sr1.setPhone("Change");
+        results.add(sr1);
+
+        sr1 = new ActiveStock();
+        sr1.setName("INTS");
+        sr1.setCityState("Price");
+        sr1.setPhone("Change");
+        results.add(sr1);
+
+        sr1 = new ActiveStock();
+        sr1.setName("AAP");
+        sr1.setCityState("Price");
+        sr1.setPhone("Change");
+        results.add(sr1);
+
+        sr1 = new ActiveStock();
+        sr1.setName("YUM");
+        sr1.setCityState("Price");
+        sr1.setPhone("Change");
+        results.add(sr1);
+
+        return results;
+    }
+        //TESTING
     public void listOnClick(View v) {
         startActivity(new Intent(MainActivity.this, StockInformation.class));
     }

@@ -181,7 +181,6 @@ public class NewStock extends AppCompatActivity {
             scanner.close();
         }
 
-
         listItems = new ArrayList<>(Arrays.asList(items));
         adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.txtitem, listItems);
         search_results.setAdapter(adapter);
@@ -217,6 +216,7 @@ public class NewStock extends AppCompatActivity {
         intent.putExtra("lower", lowerThresh);
 
         startActivity(intent);
+
 
 
 

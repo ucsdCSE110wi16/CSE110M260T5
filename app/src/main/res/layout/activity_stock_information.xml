@@ -1,77 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:fitsSystemWindows="true"
     tools:context="com.example.quick619.project.StockInformation">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="THIS IS GRAPH"
-        android:id="@+id/GRAPH"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="75dp" />
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:ems="10"
-        android:id="@+id/upperThresh"
-        android:hint="Bottom Baseline"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:textColor="#f30b0b"
-        android:layout_below="@+id/lowerThresh"
-        android:layout_alignRight="@+id/lowerThresh"
-        android:layout_alignEnd="@+id/lowerThresh"
-        android:layout_marginTop="54dp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:ems="10"
-        android:id="@+id/lowerThresh"
-        android:hint="Top Baseline"
-        android:autoText="false"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_alignTop="@+id/textView3"
-        android:layout_centerHorizontal="true" />
+    </android.support.design.widget.AppBarLayout>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/confirm"
-        android:src="@mipmap/custom_check_button"
-        android:background="#ececec"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="confirmChanges" />
+    <include layout="@layout/content_stock_information" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="$"
-        android:id="@+id/textView2"
-        android:layout_alignTop="@+id/upperThresh"
-        android:layout_toLeftOf="@+id/upperThresh"
-        android:layout_toStartOf="@+id/upperThresh" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="$"
-        android:id="@+id/textView3"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

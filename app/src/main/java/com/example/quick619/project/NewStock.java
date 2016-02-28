@@ -6,13 +6,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,12 +41,13 @@ public class NewStock extends AppCompatActivity {
 
     String StockList = "/src/main/assets/112"; //Need to fix this
     private static getquote my_quote = new getquote();  //Stock fetching class API
-    String stock_name;                                  //Stores name of stock
+    String stock_name = "";                             //Stores name of stock
     String[] items;
     ArrayList<String> listItems;
     ArrayAdapter<String> adapter;
     double my_price = 0;    //store price
     double my_change = 0;   //store change
+    int refresh = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +55,27 @@ public class NewStock extends AppCompatActivity {
         setContentView(R.layout.activity_new_stock);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         search_view = (SearchView) findViewById(R.id.searchView);
         text_price = (TextView) findViewById(R.id.curPrice);
         text_change = (TextView) findViewById(R.id.curChange);
         search_results = (ListView) findViewById(R.id.searchResults);
+        EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
+        editUpperThresh.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(8, 2)});
+        EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
+        editLowerThresh.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(8, 2)});
+
+        // Retrieves the refresh rate value from the drop down list
+        Spinner refreshList = (Spinner) findViewById(R.id.notifyTime);
+        refreshList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                refresh = pos;
+            }
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){}
+        });
 
         try {
             initList(StockList);
@@ -201,30 +221,52 @@ public class NewStock extends AppCompatActivity {
         /*final EditText editStockName = (EditText) findViewById(R.id.stockName);
         String stockName = editStockName.getText().toString();*/
 
-        //String stockName = "fake";
-
         final EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
         String upperThresh = editUpperThresh.getText().toString();
 
         final EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
         String lowerThresh = editLowerThresh.getText().toString();
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("name", stock_name);    //Edited by Ty, using stock name from search query
-        intent.putExtra("upper", upperThresh);
-        intent.putExtra("lower", lowerThresh);
+        // Makes sure a valid stock/tracker has been entered
+        if ((my_price < 0 )|| stock_name.equals("")) {
+            Toast.makeText(getApplicationContext(), "Please enter a valid stock",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-        //New intent info
-        intent.putExtra("price", Double.toString(my_price));
-        intent.putExtra("change", Double.toString(my_change));
+        // Makes sure upper threshold > lower threshold
+        else if (!(upperThresh.equals("") || lowerThresh.equals("")) &&
+                (Double.valueOf(upperThresh) <= Double.valueOf(lowerThresh))) {
+            Toast.makeText(getApplicationContext(), "The top baseline must be greater",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-        startActivity(intent);
+        // Makes sure a refresh rate was selected
+        else if (refresh == 0) {
+            Toast.makeText(getApplicationContext(), "Please select a refresh rate",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        else {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("name", stock_name);    //Edited by Ty, using stock name from search query
+            intent.putExtra("upper", upperThresh);
+            intent.putExtra("lower", lowerThresh);
+            intent.putExtra("refresh", refresh);
 
 
+            //New intent info
+            intent.putExtra("price", Double.toString(my_price));
+            intent.putExtra("change", Double.toString(my_change));
 
+            // More new intent info
+            intent.putExtra("priceVal", my_price);
+            intent.putExtra("changeVal", my_change);
 
-///        View view = findViewById(R.id.stockList);
-  //      Snackbar.make(view, "New stock tracker created", Snackbar.LENGTH_LONG)
-  //              .setAction("Action", null).show();
+            // Closes the old "MainActivity" once the new stock is confirmed to be created
+            setResult(2);
+
+            startActivity(intent);
+            finish();
+        }
     }
 }

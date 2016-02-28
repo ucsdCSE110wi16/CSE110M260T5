@@ -30,7 +30,10 @@
             android:name=".StockInformation"
             android:label="Stock Information"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.quick619.project.MainActivity" />
+        </activity>
     </application>
-
 </manifest>

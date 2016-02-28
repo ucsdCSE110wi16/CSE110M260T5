@@ -1,0 +1,34 @@
+v1.0 Changelog
+
+MAKE SURE YOU UNINSTALL YOUR CURRENT VERSION OF THE APP FROM YOUR PHONE/EMULATOR BEFORE RUNNING THIS ONE
+
+- All stocks are now persistent
+  - They will stay no matter what (no remove function implemented yet)
+
+- Fixed bugs when using the back button.
+  HERE IS HOW THE BACK BUTTON LOGIC WORKS NOW
+    - If back button is pressed on the Stock Tracker/home screen, the app closes
+    - If pressed in New Stock, goes back to Stock Tracker and no new tracker is created
+    - If pressed in Stock Information, goes back to Stock Tracker
+  
+- Added back buttons at the top of the screen (for all screens except home screen/Stock Tracker)
+  - Pressing a back button brings the user back to the home screen/Stock Tracker
+
+- Removed "Confirm" (Checkmark button) from Stock Information activity
+  - Unneeded since there are already back buttons
+
+- Stock Information screen now contains stock price/change
+- Allowed trackers that didn't have a threshold to be created
+- Changed "Notification Timer" to "Stock Refresh Rate"
+- When creating a new stock tracker, reprompts the user if a valid stock was not inputted
+- When creating a new stock tracker, reprompts the user if a stock refresh rate was not selected
+
+
+KNOWN BUGS: These are bugs I found that I don't know how to fix
+- App crashes if you search for any non-alphanumeric character in New Stock screen
+  - e.g. If you type in "[" and press enter/done, then the app crashes
+
+- Once the list of stock trackers fills up the screen, you can't click on the plus (add new stock) button.
+  - This is because the list is "on top" of the button, so it clicks the list instead of the button
+  
+

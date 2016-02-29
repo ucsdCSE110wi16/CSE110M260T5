@@ -218,6 +218,13 @@ public class NewStock extends AppCompatActivity {
         intent.putExtra("price", Double.toString(my_price));
         intent.putExtra("change", Double.toString(my_change));
 
+        if (my_change > 0)
+            intent.putExtra("color", "1");
+        else if (my_change == 0)
+            intent.putExtra("color", "0");
+        else
+            intent.putExtra("color", "-1");
+
         startActivity(intent);
 
 

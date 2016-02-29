@@ -41,13 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() !=null){
             String text = getIntent().getStringExtra("name");
-            String price = getIntent().getStringExtra("price").toString();
-            String change = getIntent().getStringExtra("change").toString();
+            String price = getIntent().getStringExtra("price");
+            String change = getIntent().getStringExtra("change");
+            String color_flag = getIntent().getStringExtra("color");
 
             ActiveStock sr1 = new ActiveStock();
             sr1.setName(text);
             sr1.setCityState("Price: $ " + price);
             sr1.setPhone("Change: $ " + change);
+
             stockList.add(sr1);
         }
 

@@ -4,7 +4,7 @@
     <string name="title_activity_stock_screen">StockScreen</string>
     <string name="title_activity_new_stock">NewStock</string>
 
-    <string name="timerPrompt">Notification Timer</string>
+    <string name="timerPrompt">Stock Refresh Rate</string>
     <string name="increment1">5 minutes</string>
     <string name="increment2">10 minutes</string>
     <string name="increment3">30 minutes</string>
@@ -24,4 +24,5 @@
         <item>@string/increment6</item>
         <item>@string/increment7</item>
     </string-array>
+    <string name="title_activity_stock_information">StockInformation</string>
 </resources>

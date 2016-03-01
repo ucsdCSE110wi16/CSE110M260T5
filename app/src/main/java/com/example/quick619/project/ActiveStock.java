@@ -1,8 +1,8 @@
 package com.example.quick619.project;
 
+import android.os.CountDownTimer;
+
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Ty on 2/26/2016.
@@ -32,7 +32,6 @@ public class ActiveStock {
     private double change;
     private boolean passed = false;
     private int index;
-    private Timer timer;
 
 
     private String name = "";
@@ -43,7 +42,7 @@ public class ActiveStock {
         super();
     }
 
-    public ActiveStock(String ticker, StockController control, int refreshRate,
+    /*public ActiveStock(String ticker, StockController control, int refreshRate,
                        double topThresh, double botThresh, int index) throws IOException {
         this.ticker = ticker;
         this.control = control;
@@ -55,13 +54,16 @@ public class ActiveStock {
         timer = new Timer();
         threshholdCheck();
         control.threshholdPassed(index, crossedThresh);
-    }
+    }*/
+
 
     public void threshholdCheck() throws IOException {
-        while (!passed)
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
+            new CountDownTimer(refreshRate * 60000, refreshRate) {
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                public void onFinish() {
                     double oldPrice = price;
                     try {
                         price = quote.getprice(ticker);
@@ -77,33 +79,23 @@ public class ActiveStock {
                     }
                     if (oldPrice != price)
                         control.sendUpdate();
+                    if(!passed)
+                        start();
                 }
-            }, refreshRate * 60000);
+            }.start();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setController(StockController control) { this.control = control; }
+    public StockController getController () { return control; }
 
-    public String getName() {
-        return name;
-    }
+    public void setName(String name) { this.ticker = this.name = name; }
+    public String getName() { return name; }
 
-    public void setCityState(String cityState) {
-        this.cityState = cityState;
-    }
+    public void setCityState(String cityState) { this.cityState = cityState; }
+    public String getCityState() { return cityState; }
 
-    public String getCityState() {
-        return cityState;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
+    public void setPhone(String phone) { this.phone = phone; }
+    public String getPhone() { return phone; }
 
     public void setUpper(double upper) { this.topThresh = upper; }
     public double getUpper() { return topThresh; }

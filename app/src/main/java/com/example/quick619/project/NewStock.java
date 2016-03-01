@@ -39,8 +39,6 @@ public class NewStock extends AppCompatActivity {
     TextView text_change;     //Change text var
     ListView search_results;  //Search results var
 
-    private StockController controller = new StockController();
-
     String StockList = "/src/main/assets/112"; //Need to fix this
     private static getquote my_quote = new getquote();  //Stock fetching class API
     String stock_name = "";                             //Stores name of stock

@@ -14,6 +14,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Necessary to access API database
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         // Accesses the persistent data and recreates the stock list
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -64,15 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Necessary to access API database
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         //Potential New View and Adpater
         final ListView stockLV = (ListView) findViewById(R.id.stockList);
-
-        // DONT TEST STOCKS ANYMORE, I GOT IT TO WORK WOO
-        // ArrayList<ActiveStock> stockList = GenerateTestStocks();
 
         if(getIntent().getExtras() !=null){
             ActiveStock sr1 = new ActiveStock();
@@ -99,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
             sr1.setPrice(priceVal);
             sr1.setChange(changeVal);
             sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
+            try {
+                sr1.threshholdCheck();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             numStocks++;
             stockList.add(sr1);

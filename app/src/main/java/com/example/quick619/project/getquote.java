@@ -11,7 +11,12 @@ public class getquote {
 	public double getprice (String symbol) throws IOException
 	{
 		Stock stock = YahooFinance.get(symbol);
-		
+
+		// Null check
+		// - Added by Sam to get rid of a documented bug
+		if (stock == null)
+			return -1;
+
 		String name = stock.getName();
 		if(name.compareTo("N/A") == 0)
 			return -1;

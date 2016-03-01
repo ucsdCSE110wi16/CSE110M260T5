@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Accesses the persistent data and recreates the stock list
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
         numStocks = preferences.getInt("numStocks", -1);
 
         if (numStocks == -1) {
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
         else {
             for (int i = 0; i < numStocks; i++) {
+
+                String json = preferences.getString("stock" + i, "");
+                ActiveStock sr = gson.fromJson(json, ActiveStock.class);
+
+                /* THIS IS THE LONG WAY TO DO IT, THE ABOVE WAY WORKS BETTER
                 ActiveStock sr = new ActiveStock();
                 sr.setName(preferences.getString("name" + String.valueOf(i), ""));
                 double price = Double.longBitsToDouble(preferences.getLong("price" + String.valueOf(i), (long)0.00));
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 double low = Double.longBitsToDouble(preferences.getLong("lower" + String.valueOf(i), -1));
                 if (up != -1) sr.setUpper(up);
                 if (low != -1) sr.setLower(low);
+                */
 
                 stockList.add(sr);
             }
@@ -69,41 +77,51 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        //Potential New View and Adpater
+        //Potential New View and Adapter
         final ListView stockLV = (ListView) findViewById(R.id.stockList);
 
+        // Runs if the user inputted a new stock from the NewStock activity
+        if(getIntent().getExtras() !=null) {
+            if (getIntent().getStringExtra("price") != null) {
+                ActiveStock sr1 = new ActiveStock();
 
-        if(getIntent().getExtras() !=null){
-            ActiveStock sr1 = new ActiveStock();
+                // Individually sets all required data fields for the ActiveStock
+                String text = getIntent().getStringExtra("name");
+                String price = getIntent().getStringExtra("price").toString();
+                String change = getIntent().getStringExtra("change").toString();
+                double priceVal = getIntent().getDoubleExtra("priceVal", -1);
+                double changeVal = getIntent().getDoubleExtra("changeVal", -1);
 
-            String text = getIntent().getStringExtra("name");
-            String price = getIntent().getStringExtra("price").toString();
-            String change = getIntent().getStringExtra("change").toString();
-            double priceVal = getIntent().getDoubleExtra("priceVal", -1);
-            double changeVal = getIntent().getDoubleExtra("changeVal", -1);
+                if (!getIntent().getStringExtra("upper").equals("")) {
+                    sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
+                }
 
-            if (!getIntent().getStringExtra("upper").equals("")) {
-                sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
+                if (!getIntent().getStringExtra("lower").equals("")) {
+                    sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
+                }
+
+                sr1.setName(text);
+                sr1.setCityState("Price: $ " + price);
+                sr1.setPhone("Change: $ " + change);
+                sr1.setPrice(priceVal);
+                sr1.setChange(changeVal);
+                sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
+                try {
+                    sr1.threshholdCheck();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // Updates the SharedPreferences/persistent data right after stock creation
+                SharedPreferences.Editor prefsEditor = preferences.edit();
+                String json = gson.toJson(sr1);
+                prefsEditor.putString("stock" + numStocks, json);
+                numStocks++;
+                prefsEditor.putInt("numStocks", numStocks);
+                prefsEditor.apply();
+
+                stockList.add(sr1);
             }
-
-            if (!getIntent().getStringExtra("lower").equals("")) {
-                sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
-            }
-
-            sr1.setName(text);
-            sr1.setCityState("Price: $ " + price);
-            sr1.setPhone("Change: $ " + change);
-            sr1.setPrice(priceVal);
-            sr1.setChange(changeVal);
-            sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
-            try {
-                sr1.threshholdCheck();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            numStocks++;
-            stockList.add(sr1);
         }
 
         stockLV.setAdapter(new MyCustomBaseAdapter(this, stockList));
@@ -128,11 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
     }
 
     public void listOnClick(View v) {
@@ -151,46 +164,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    //TODO implement these 3 methods below once stocks are editable
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.quick619.project/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
+    /** Removes the stock from the app and updates the list
+     * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
+     *
+     * @param position the stock's position in the stockList view (starting at 0)
+     */
+    private void removeStock(int position) {
+
+        // Removes the stock from the ArrayList and the persistent data/sharedPreferences
+        stockList.remove(position);
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("stock" + position);
+        numStocks--;
+        editor.putInt("numStocks", numStocks);
+
+        // Rearranges the current sharedPreferences data by "shifting" the key names
+        for (int i = position+1; i < numStocks; i++) {
+            String sr = preferences.getString("stock" + i, "");
+
+            // Changes the key name so it is consistent with the shifting ArrayList
+            editor.putString("stock" + (i-1), sr);
+            editor.remove("stock" + i);
+        }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    /** Updates one of the stock's baselines depending on user interaction
+     * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
+     *
+     * @param position the stock's position in the stockList view (starting at 0)
+     * @param threshold the stock's new threshold
+     * @param up true if the upper threshold is being updated, false if bottom.
+     */
+    private void updateThreshold(int position, double threshold, boolean up) {
+        ActiveStock sr = stockList.get(position);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.quick619.project/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+        if (up) sr.setUpper(threshold);
+        else    sr.setLower(threshold);
     }
 
+    /** Updates the refresh rate depending on user interaction
+     * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
+     * I WILL ALSO TY/SHRAVAN/WHOEVER IS DOING PUSH NOTIFICATIONS TO VERIFY IF ITS OK
+     *
+     * @param position the stock's position in the stockList view (starting at 0)
+     * @param refresh rate
+     */
+    private void updateRefresh(int position, int refresh) {
+        ActiveStock sr = stockList.get(position);
+        sr.setRefresh(refresh);
+    }
+
+    /* NOT NEEDED BECAUSE ITS STORED DIRECTLY AFTER CREATION INSTEAD
+     *
+     *
     // Credit to http://stackoverflow.com/questions/151777/saving-activity-state-on-android
     // Answer #4
     // Allows for persistent data
@@ -198,9 +227,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        // Store values between instances here
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();  // Put the values from the UI
+
+        editor.apply();
+
+
         editor.putInt("numStocks", numStocks);
 
         // Stores all stock names, prices, changes, and thresholds
@@ -220,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Commit to storage
         editor.apply();
-    }
 
+    }
+*/
 }

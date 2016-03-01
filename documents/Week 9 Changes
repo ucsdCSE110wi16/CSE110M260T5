@@ -1,0 +1,24 @@
+Week 9 Changes:
+
+v1.1
+  - Fixed a bug where the app refuses to open if it is closed immediately after it runs for the first time
+  - Fixed the two bugs from the v1.0 Changelog
+    - The "add new stock" button can now be clicked on when the list fills up the page
+    - The app no longer crashes when searching for non-alphanumeric characters in New Tracker screen
+  
+  - Changed the method of persistent data storage using SharedPreferences (i.e. I did what Ty said to do).
+    - Stocks are now saved to persistent data IMMEDIATELY after they are created.
+    
+  - Added simple functions to remove the stock (removeStock), change the thresholds (updateThreshold), and
+    change the refresh rate (updateRefresh)
+    - Does not provide any functionality yet; waiting until the "edit stock" activity is created.
+      - Will implement it when that is done (Sam)
+
+  KNOWN BUG:
+  - "NewStock" Activity
+    - When the refresh rate is selected, the keyboard for inputting the stock name is reopened for some reason.
+      - Not a big deal, but it kinda sucks.
+      
+      
+v1.2
+  - lol nothing yet

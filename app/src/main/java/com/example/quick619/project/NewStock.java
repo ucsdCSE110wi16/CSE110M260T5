@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -48,6 +49,8 @@ public class NewStock extends AppCompatActivity {
     double my_price = 0;    //store price
     double my_change = 0;   //store change
     int refresh = 0;
+    int index = 0;
+    DecimalFormat numberFormat = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,29 @@ public class NewStock extends AppCompatActivity {
         refreshList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                switch (pos){
+                    case 1:
+                        refresh = 5;
+                        break;
+                    case 2:
+                        refresh = 10;
+                        break;
+                    case 3:
+                        refresh = 30;
+                        break;
+                    case 4:
+                        refresh = 60;
+                        break;
+                    case 5:
+                        refresh = 60 * 2;
+                        break;
+                    case 6:
+                        refresh = 24 * 60;
+                        break;
+                    case 7:
+                        refresh = 24 * 60 * 7;
+                        break;
+                }
                 refresh = pos;
             }
             @Override
@@ -141,7 +167,9 @@ public class NewStock extends AppCompatActivity {
                 //Use quote API class to get info
                 try {
                     my_price = my_quote.getprice(query);
+                    my_price = Double.parseDouble(numberFormat.format(my_price));
                     my_change = my_quote.getchange(query);
+                    my_change = Double.parseDouble(numberFormat.format(my_change));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -178,7 +206,7 @@ public class NewStock extends AppCompatActivity {
             }
         });
 
- //       stockListView.setAdapter(stockListAdapter);
+        //       stockListView.setAdapter(stockListAdapter);
     }
 
     //Initialize the Search Results List
@@ -247,6 +275,8 @@ public class NewStock extends AppCompatActivity {
         }
 
         else {
+
+            //Make the view for the stock
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("name", stock_name);    //Edited by Ty, using stock name from search query
             intent.putExtra("upper", upperThresh);

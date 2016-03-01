@@ -14,10 +14,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import yahoofinance.Stock;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Necessary to access API database
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         // Accesses the persistent data and recreates the stock list
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -67,17 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Necessary to access API database
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         //Potential New View and Adpater
         final ListView stockLV = (ListView) findViewById(R.id.stockList);
 
-        // DONT TEST STOCKS ANYMORE, I GOT IT TO WORK WOO
-        // ArrayList<ActiveStock> stockList = GenerateTestStocks();
 
-        if(getIntent().getExtras() !=null ||){
+        if(getIntent().getExtras() !=null){
             ActiveStock sr1 = new ActiveStock();
 
             String text = getIntent().getStringExtra("name");
@@ -97,11 +93,14 @@ public class MainActivity extends AppCompatActivity {
             sr1.setName(text);
             sr1.setCityState("Price: $ " + price);
             sr1.setPhone("Change: $ " + change);
-
-            // More extras
             sr1.setPrice(priceVal);
             sr1.setChange(changeVal);
             sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
+            try {
+                sr1.threshholdCheck();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             numStocks++;
             stockList.add(sr1);
@@ -135,40 +134,6 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
     }
-
-    /* WE DONT NEED TO TEST ANYMORE, REMOVE WHEN YOU FEEL LIKE IT
-    //Input test Method
-    private ArrayList<ActiveStock> GenerateTestStocks(){
-
-        ArrayList<ActiveStock> results = new ArrayList<ActiveStock>();
-
-        ActiveStock sr1 = new ActiveStock();
-        sr1.setName("AAPL");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        sr1 = new ActiveStock();
-        sr1.setName("INTS");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        sr1 = new ActiveStock();
-        sr1.setName("AAP");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        sr1 = new ActiveStock();
-        sr1.setName("YUM");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        return results;
-    }
-    */
 
     public void listOnClick(View v) {
         startActivity(new Intent(MainActivity.this, StockInformation.class));

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // DONT TEST STOCKS ANYMORE, I GOT IT TO WORK WOO
         // ArrayList<ActiveStock> stockList = GenerateTestStocks();
 
-        if(getIntent().getExtras() !=null){
+        if(getIntent().getExtras() !=null ||){
             ActiveStock sr1 = new ActiveStock();
 
             String text = getIntent().getStringExtra("name");

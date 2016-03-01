@@ -15,9 +15,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-import yahoofinance.Stock;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,11 +78,6 @@ public class MainActivity extends AppCompatActivity {
             ActiveStock sr1 = new ActiveStock();
 
             String text = getIntent().getStringExtra("name");
-<<<<<<< HEAD
-            String price = getIntent().getStringExtra("price");
-            String change = getIntent().getStringExtra("change");
-            String color_flag = getIntent().getStringExtra("color");
-=======
             String price = getIntent().getStringExtra("price").toString();
             String change = getIntent().getStringExtra("change").toString();
             double priceVal = getIntent().getDoubleExtra("priceVal", -1);
@@ -98,21 +90,17 @@ public class MainActivity extends AppCompatActivity {
             if (!getIntent().getStringExtra("lower").equals("")) {
                 sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
             }
->>>>>>> 926b4bd33725719ceb1eca207db3179846ac83cc
 
             sr1.setName(text);
             sr1.setCityState("Price: $ " + price);
             sr1.setPhone("Change: $ " + change);
 
-<<<<<<< HEAD
-=======
             // More extras
             sr1.setPrice(priceVal);
             sr1.setChange(changeVal);
             sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
 
             numStocks++;
->>>>>>> 926b4bd33725719ceb1eca207db3179846ac83cc
             stockList.add(sr1);
         }
 
@@ -144,40 +132,6 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
     }
-
-    /* WE DONT NEED TO TEST ANYMORE, REMOVE WHEN YOU FEEL LIKE IT
-    //Input test Method
-    private ArrayList<ActiveStock> GenerateTestStocks(){
-
-        ArrayList<ActiveStock> results = new ArrayList<ActiveStock>();
-
-        ActiveStock sr1 = new ActiveStock();
-        sr1.setName("AAPL");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        sr1 = new ActiveStock();
-        sr1.setName("INTS");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        sr1 = new ActiveStock();
-        sr1.setName("AAP");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        sr1 = new ActiveStock();
-        sr1.setName("YUM");
-        sr1.setCityState("Price");
-        sr1.setPhone("Change");
-        results.add(sr1);
-
-        return results;
-    }
-    */
 
     public void listOnClick(View v) {
         startActivity(new Intent(MainActivity.this, StockInformation.class));

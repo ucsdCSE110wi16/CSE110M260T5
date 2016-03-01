@@ -39,6 +39,8 @@ public class NewStock extends AppCompatActivity {
     TextView text_change;     //Change text var
     ListView search_results;  //Search results var
 
+    private StockController controller = new StockController();
+
     String StockList = "/src/main/assets/112"; //Need to fix this
     private static getquote my_quote = new getquote();  //Stock fetching class API
     String stock_name = "";                             //Stores name of stock
@@ -48,6 +50,7 @@ public class NewStock extends AppCompatActivity {
     double my_price = 0;    //store price
     double my_change = 0;   //store change
     int refresh = 0;
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,29 @@ public class NewStock extends AppCompatActivity {
         refreshList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                switch (pos){
+                    case 1:
+                        refresh = 5;
+                        break;
+                    case 2:
+                        refresh = 10;
+                        break;
+                    case 3:
+                        refresh = 30;
+                        break;
+                    case 4:
+                        refresh = 60;
+                        break;
+                    case 5:
+                        refresh = 60 * 2;
+                        break;
+                    case 6:
+                        refresh = 24 * 60;
+                        break;
+                    case 7:
+                        refresh = 24 * 60 * 7;
+                        break;
+                }
                 refresh = pos;
             }
             @Override
@@ -178,7 +204,7 @@ public class NewStock extends AppCompatActivity {
             }
         });
 
- //       stockListView.setAdapter(stockListAdapter);
+        //       stockListView.setAdapter(stockListAdapter);
     }
 
     //Initialize the Search Results List
@@ -246,23 +272,14 @@ public class NewStock extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
-<<<<<<< HEAD
-        if (my_change > 0)
-            intent.putExtra("color", "1");
-        else if (my_change == 0)
-            intent.putExtra("color", "0");
-        else
-            intent.putExtra("color", "-1");
-
-        startActivity(intent);
-=======
         else {
+
+            //Make the view for the stock
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("name", stock_name);    //Edited by Ty, using stock name from search query
             intent.putExtra("upper", upperThresh);
             intent.putExtra("lower", lowerThresh);
             intent.putExtra("refresh", refresh);
->>>>>>> 926b4bd33725719ceb1eca207db3179846ac83cc
 
 
             //New intent info

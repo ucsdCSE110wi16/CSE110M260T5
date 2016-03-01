@@ -16,6 +16,7 @@ public class StockController {
     }
 
     public void  addNewStock(ActiveStock stock){
+        if(stock != null)
         stock_models.add(stock);
     }
 
@@ -23,7 +24,7 @@ public class StockController {
         stock_models.remove(position);
     }
 
-    public void sendUpdates(){
+    public void sendUpdate(){
         //Update adpater
     }
 

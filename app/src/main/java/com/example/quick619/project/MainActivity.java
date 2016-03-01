@@ -92,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
             sr1.setName(text);
             sr1.setCityState("Price: $ " + price);
             sr1.setPhone("Change: $ " + change);
-
-            // More extras
             sr1.setPrice(priceVal);
             sr1.setChange(changeVal);
             sr1.setRefresh(getIntent().getIntExtra("refresh", 0));

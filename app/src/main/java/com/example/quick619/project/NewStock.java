@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -49,6 +50,7 @@ public class NewStock extends AppCompatActivity {
     double my_change = 0;   //store change
     int refresh = 0;
     int index = 0;
+    DecimalFormat numberFormat = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +167,9 @@ public class NewStock extends AppCompatActivity {
                 //Use quote API class to get info
                 try {
                     my_price = my_quote.getprice(query);
+                    my_price = Double.parseDouble(numberFormat.format(my_price));
                     my_change = my_quote.getchange(query);
+                    my_change = Double.parseDouble(numberFormat.format(my_change));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

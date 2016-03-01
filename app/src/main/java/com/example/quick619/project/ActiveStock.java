@@ -3,6 +3,7 @@ package com.example.quick619.project;
 import android.os.CountDownTimer;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 /**
  * Created by Ty on 2/26/2016.
@@ -32,6 +33,7 @@ public class ActiveStock {
     private double change;
     private boolean passed = false;
     private int index;
+    DecimalFormat numberFormat = new DecimalFormat("#.00");
 
 
     private String name = "";
@@ -67,6 +69,7 @@ public class ActiveStock {
                     double oldPrice = price;
                     try {
                         price = quote.getprice(ticker);
+                        price = Double.parseDouble(numberFormat.format(price));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -78,7 +81,16 @@ public class ActiveStock {
                         crossedThresh = botThresh;
                     }
                     if (oldPrice != price)
+                    {
+                        try {
+                            change = quote.getchange(ticker);
+                            change = Double.parseDouble(numberFormat.format(change));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         control.sendUpdate();
+                    }
                     if(!passed)
                         start();
                 }

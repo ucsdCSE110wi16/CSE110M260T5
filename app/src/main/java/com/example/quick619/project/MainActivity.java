@@ -1,14 +1,22 @@
 package com.example.quick619.project;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<ActiveStock> stockList = new ArrayList<>();   // Holds the list of stocks
     int numStocks = 0;
+    PopupWindow popup = new PopupWindow();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,14 +157,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void listOnClick(View v) {
-        startActivity(new Intent(MainActivity.this, StockInformation.class));
+    public void editOnClick(View v) {
+        View layout = getLayoutInflater().inflate(R.layout.edit_stock, null);
+        popup.setContentView(layout);
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setOutsideTouchable(true);
+        popup.setFocusable(true);
+        popup.showAtLocation(v, Gravity.CENTER, 0, 0);
+    }
+
+    public void confirmEdit(View v) {
+        popup.dismiss();
+    }
+
+    public void deleteStock(View v) {
+        popup.dismiss();
     }
 
     public void buttonOnClick(View v) {
         Intent makeNewStock = new Intent(MainActivity.this, NewStock.class);
         startActivityForResult(makeNewStock, 2);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

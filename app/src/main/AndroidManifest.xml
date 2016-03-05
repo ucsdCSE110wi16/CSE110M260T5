@@ -36,4 +36,5 @@
                 android:value="com.example.quick619.project.MainActivity" />
         </activity>
     </application>
+
 </manifest>

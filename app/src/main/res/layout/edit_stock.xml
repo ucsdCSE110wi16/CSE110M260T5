@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.quick619.project.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stock_name"
+        android:paddingTop="30dp"
+        android:textSize="50sp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        android:id="@+id/price"
+        android:layout_below="@+id/ticker"
+        android:textAlignment="center"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+/-"
+        android:id="@+id/change"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:layout_below="@+id/price"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/upperThresh"
+        android:editable="false"
+        android:hint="New Top Baseline"
+        android:layout_below="@id/change"
+        android:layout_marginTop="38dp"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/lowerThresh"
+        android:editable="false"
+        android:hint="New Bottom Baseline"
+        android:layout_below="@+id/upperThresh"
+        android:layout_alignLeft="@+id/upperThresh"
+        android:layout_alignStart="@+id/upperThresh" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirmEdit"
+        android:src="@mipmap/custom_check_button"
+        android:background="#ffffff"
+        android:onClick="confirmEdit"
+        android:layout_marginBottom="98dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/lowerThresh"
+        android:layout_alignEnd="@+id/lowerThresh" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="$"
+        android:id="@+id/low$"
+        android:layout_alignBottom="@+id/lowerThresh"
+        android:layout_toLeftOf="@+id/lowerThresh"
+        android:layout_toStartOf="@+id/lowerThresh"
+        android:layout_marginTop="86dp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="$"
+        android:id="@+id/upper$"
+        android:layout_alignBottom="@+id/upperThresh"
+        android:layout_toLeftOf="@+id/upperThresh"
+        android:layout_toStartOf="@+id/upperThresh"
+        android:layout_alignLeft="@+id/low$"
+        android:layout_alignStart="@+id/low$"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifyTime"
+        android:entries="@array/incrementList"
+        android:background="#d7d4d4"
+        android:layout_marginTop="29dp"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/lowerThresh"
+        android:layout_alignLeft="@+id/lowerThresh"
+        android:layout_alignStart="@+id/lowerThresh"
+        android:layout_alignRight="@+id/lowerThresh"
+        android:layout_alignEnd="@+id/lowerThresh" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@android:drawable/arrow_down_float"
+        android:layout_alignTop="@+id/notifyTime"
+        android:layout_alignRight="@+id/notifyTime"
+        android:layout_alignEnd="@+id/notifyTime" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteStock"
+        android:src="@mipmap/trashbin"
+        android:onClick="deleteStock"
+        android:background="#ffffff"
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
+        android:scaleType="fitStart"
+        android:layout_alignBottom="@+id/confirmEdit"
+        android:layout_alignTop="@+id/confirmEdit"
+        android:layout_alignLeft="@+id/notifyTime"
+        android:layout_alignStart="@+id/notifyTime"
+        android:layout_toStartOf="@+id/price" />
+
+</RelativeLayout>

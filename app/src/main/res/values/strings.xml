@@ -25,4 +25,5 @@
         <item>@string/increment7</item>
     </string-array>
     <string name="title_activity_stock_information">StockInformation</string>
+    <string name="title_activity_edit_stock">EditStock</string>
 </resources>

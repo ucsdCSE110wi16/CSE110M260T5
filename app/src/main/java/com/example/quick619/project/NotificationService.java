@@ -58,7 +58,7 @@ public class NotificationService extends Service {
 
     public void threshholdCheck() {
 
-        new CountDownTimer(refreshRate * 1000, 1000) {
+        new CountDownTimer(refreshRate * 60000, 1000) {
             public void onTick(long millisUntilFinished) {
                     System.out.println(millisUntilFinished/1000);
             }

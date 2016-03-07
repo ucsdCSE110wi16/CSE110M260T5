@@ -44,6 +44,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.quick619.project.MainActivity" />
         </activity>
+
+
+        <service android:name="NotificationService" android:exported="false">
+        </service>
+
+        <receiver android:name= "BootReceiver">
+            <intent-filter>
+                <action android:name="come.example.quick619.project"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

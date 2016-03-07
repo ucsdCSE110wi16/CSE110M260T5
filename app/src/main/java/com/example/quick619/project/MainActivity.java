@@ -1,25 +1,14 @@
 package com.example.quick619.project;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
@@ -173,6 +162,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Intent myService = new Intent(this, NotificationService.class);
+
+        myService.putExtra("ActiveStock", sr1);
+        myService.putExtra("ticker", text);
+        myService.putExtra("price", price);
+        myService.putExtra("topThresh", getIntent().getStringExtra("upper"));
+        myService.putExtra("botThresh", getIntent().getStringExtra("lower"));
+        myService.putExtra("refresh", sr1.getRefresh());
+        startService(myService);
+
+
         // Updates the SharedPreferences/persistent data right after stock creation
         SharedPreferences.Editor prefsEditor = preferences.edit();
         String json = gson.toJson(sr1);
@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void buttonOnClick(View v) {
+
         Intent makeNewStock = new Intent(MainActivity.this, NewStock.class);
         startActivityForResult(makeNewStock, 2);
     }

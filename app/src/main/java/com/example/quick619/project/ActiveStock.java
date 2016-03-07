@@ -1,9 +1,10 @@
 package com.example.quick619.project;
 
-import android.os.CountDownTimer;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
+
 
 /**
  * Created by Ty on 2/26/2016.
@@ -20,70 +21,68 @@ import java.text.DecimalFormat;
  * 4: 1 hour            5: 2 hours             6: 1 day             7: 1 week
  */
 
-public class ActiveStock {
+public class ActiveStock implements Parcelable {
 
     private String ticker;
-    private StockController control;
-    private getquote quote = new getquote();
-    private int refreshRate;
-    private double botThresh;
-    private double topThresh;
-    private double crossedThresh;
+   // private StockController control = new StockController();
     private double price;
     private double change;
-    private boolean passed = false;
-    private int index;
-    DecimalFormat numberFormat = new DecimalFormat("#.00");
+    private double botThresh;
+    private double topThresh;
+    private int refreshRate = 5;
+
 
 
     private String name = "";
     private String cityState = "";
     private String phone = "";
 
+    public ActiveStock(Parcel in) {
+        ticker = in.readString();
+        price = in.readDouble();
+        change = in.readDouble();
+        botThresh = in.readDouble();
+        topThresh = in.readDouble();
+        refreshRate = in.readInt();
+    }
+
     public ActiveStock() {
         super();
     }
 
-    public void threshholdCheck() throws IOException {
-            new CountDownTimer(refreshRate * 60000, refreshRate) {
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                public void onFinish() {
-                    double oldPrice = price;
-                    try {
-                        price = quote.getprice(ticker);
-                        price = Double.parseDouble(numberFormat.format(price));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (price >= topThresh) {
-                        passed = true;
-                        crossedThresh = topThresh;
-                    } else if (price <= botThresh) {
-                        passed = true;
-                        crossedThresh = botThresh;
-                    }
-                    if (oldPrice != price)
-                    {
-                        try {
-                            change = quote.getchange(ticker);
-                            change = Double.parseDouble(numberFormat.format(change));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        control.sendUpdate();
-                    }
-                    if(!passed)
-                        start();
-                }
-            }.start();
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setController(StockController control) { this.control = control; }
-    public StockController getController () { return control; }
+    // write your object's data to the passed-in Parcel
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(ticker);
+        out.writeDouble(price);
+        out.writeDouble(change);
+        out.writeDouble(botThresh);
+        out.writeDouble(topThresh);
+        out.writeInt(refreshRate);
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<ActiveStock> CREATOR = new Parcelable.Creator<ActiveStock>() {
+        public ActiveStock createFromParcel(Parcel in) {
+            return new ActiveStock(in);
+        }
+
+        public ActiveStock[] newArray(int size) {
+            return new ActiveStock[size];
+        }
+    };
+
+    public void threshholdCheck() throws IOException{
+
+    }
+
+   /* public void setController(StockController control) { this.control = control; }
+    public StockController getController () { return control; }*/
 
     public void setName(String name) { this.ticker = this.name = name; }
     public String getName() { return name; }
@@ -109,6 +108,4 @@ public class ActiveStock {
     public void setChange(double change) { this.change = change; }
     public double getChange() { return change; }
 
-    public void setIndex(int index) { this.index = index; }
-    public int getIndex() { return index; }
 }

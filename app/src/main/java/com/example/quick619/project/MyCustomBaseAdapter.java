@@ -1,10 +1,13 @@
 package com.example.quick619.project;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,6 +42,10 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.custom_row_view, null);
             holder = new ViewHolder();
+
+            ImageView editButton = (ImageView) convertView.findViewById(R.id.stockInfo);
+            editButton.setTag(position);
+
             holder.txtName = (TextView) convertView.findViewById(R.id.name);
             holder.txtCityState = (TextView) convertView.findViewById(R.id.cityState);
             holder.txtPhone = (TextView) convertView.findViewById(R.id.phone);
@@ -59,5 +66,6 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         TextView txtName;
         TextView txtCityState;
         TextView txtPhone;
+        ImageView editButton;
     }
 }

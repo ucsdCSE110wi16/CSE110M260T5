@@ -44,21 +44,6 @@ public class ActiveStock {
         super();
     }
 
-    /*public ActiveStock(String ticker, StockController control, int refreshRate,
-                       double topThresh, double botThresh, int index) throws IOException {
-        this.ticker = ticker;
-        this.control = control;
-        this.botThresh = botThresh;
-        this.topThresh = topThresh;
-        this.refreshRate = refreshRate;
-        this.index = index;
-        this.price = quote.getprice(ticker);
-        timer = new Timer();
-        threshholdCheck();
-        control.threshholdPassed(index, crossedThresh);
-    }*/
-
-
     public void threshholdCheck() throws IOException {
             new CountDownTimer(refreshRate * 60000, refreshRate) {
                 public void onTick(long millisUntilFinished) {
@@ -124,4 +109,6 @@ public class ActiveStock {
     public void setChange(double change) { this.change = change; }
     public double getChange() { return change; }
 
+    public void setIndex(int index) { this.index = index; }
+    public int getIndex() { return index; }
 }

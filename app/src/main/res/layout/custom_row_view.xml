@@ -34,9 +34,9 @@
         android:id="@+id/stockInfo"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:onClick="editOnClick"
         android:src="@android:drawable/ic_menu_edit"
         android:background="#ececec"
-        android:contentDescription="" />
+        android:contentDescription=""
+        android:onClick="editOnClick" />
 
 </LinearLayout>

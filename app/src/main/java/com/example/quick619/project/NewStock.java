@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -97,7 +99,7 @@ public class NewStock extends AppCompatActivity {
                         refresh = 24 * 60 * 7;
                         break;
                 }
-                refresh = pos;
+
             }
             @Override
             public void onNothingSelected (AdapterView < ? > parent){}
@@ -185,7 +187,7 @@ public class NewStock extends AppCompatActivity {
 
                 //Set color of change text
                 if (my_change > 0)
-                    text_change.setTextColor(Color.GREEN);
+                    text_change.setTextColor(Color.parseColor("#FF1DB318"));
                 else if (my_change == 0)
                     text_change.setTextColor(Color.GRAY);
                 else
@@ -206,7 +208,6 @@ public class NewStock extends AppCompatActivity {
             }
         });
 
-        //       stockListView.setAdapter(stockListAdapter);
     }
 
     //Initialize the Search Results List
@@ -246,8 +247,6 @@ public class NewStock extends AppCompatActivity {
     }
 
     public void makeNewStock(View v) {
-        /*final EditText editStockName = (EditText) findViewById(R.id.stockName);
-        String stockName = editStockName.getText().toString();*/
 
         final EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
         String upperThresh = editUpperThresh.getText().toString();
@@ -261,11 +260,11 @@ public class NewStock extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
-        // Makes sure upper threshold > lower threshold
+        // Makes sure lower threshold < my_price
         else if (!(upperThresh.equals("") || lowerThresh.equals("")) &&
-                (Double.valueOf(upperThresh) <= Double.valueOf(lowerThresh))) {
-            Toast.makeText(getApplicationContext(), "The top baseline must be greater",
-                    Toast.LENGTH_SHORT).show();
+                (Double.valueOf(upperThresh) < Double.valueOf(lowerThresh))) {
+            Toast.makeText(getApplicationContext(), "The top baseline must be greater than the bottom",
+                    Toast.LENGTH_LONG).show();
         }
 
         // Makes sure a refresh rate was selected
@@ -273,6 +272,21 @@ public class NewStock extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please select a refresh rate",
                     Toast.LENGTH_SHORT).show();
         }
+
+        // Makes sure upper threshold > price
+        else if (!(upperThresh.equals("")) &&
+                (Double.valueOf(upperThresh) <= my_price)) {
+            Toast.makeText(getApplicationContext(), "The top baseline must be greater than the price",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        // Makes sure lower threshold < price
+        else if (!(lowerThresh.equals("")) &&
+                (Double.valueOf(lowerThresh) >= my_price)) {
+            Toast.makeText(getApplicationContext(), "The bottom baseline must be less than the price",
+                    Toast.LENGTH_LONG).show();
+        }
+
 
         else {
 

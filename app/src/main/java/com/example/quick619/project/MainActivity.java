@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<ActiveStock> stockList = new ArrayList<>();   // Holds the list of stocks
     int numStocks = 0;
-    PopupWindow popup = new PopupWindow();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,81 +56,30 @@ public class MainActivity extends AppCompatActivity {
             numStocks = 0;
         }
 
+        // Retrieving data from saved session
         else {
             for (int i = 0; i < numStocks; i++) {
-
                 String json = preferences.getString("stock" + i, "");
                 ActiveStock sr = gson.fromJson(json, ActiveStock.class);
-
-                /* THIS IS THE LONG WAY TO DO IT, THE ABOVE WAY WORKS BETTER
-                ActiveStock sr = new ActiveStock();
-                sr.setName(preferences.getString("name" + String.valueOf(i), ""));
-                double price = Double.longBitsToDouble(preferences.getLong("price" + String.valueOf(i), (long)0.00));
-                double change = Double.longBitsToDouble(preferences.getLong("change" + String.valueOf(i), (long)0.00));
-
-                sr.setPrice(price);
-                sr.setChange(change);
-                sr.setCityState("Price: $ " + price);
-                sr.setPhone("Change: $ " + change);
-                sr.setRefresh(preferences.getInt("refresh" + String.valueOf(i), 0));
-
-                double up = Double.longBitsToDouble(preferences.getLong("upper" + String.valueOf(i), -1));
-                double low = Double.longBitsToDouble(preferences.getLong("lower" + String.valueOf(i), -1));
-                if (up != -1) sr.setUpper(up);
-                if (low != -1) sr.setLower(low);
-                */
-
                 stockList.add(sr);
             }
         }
 
         setContentView(R.layout.activity_main);
-
-        //Potential New View and Adapter
         final ListView stockLV = (ListView) findViewById(R.id.stockList);
 
-        // Runs if the user inputted a new stock from the NewStock activity
+        // Runs if the user came from either NewStock or EditStock
         if(getIntent().getExtras() !=null) {
-            if (getIntent().getStringExtra("price") != null) {
-                ActiveStock sr1 = new ActiveStock();
 
-                // Individually sets all required data fields for the ActiveStock
-                String text = getIntent().getStringExtra("name");
-                String price = getIntent().getStringExtra("price").toString();
-                String change = getIntent().getStringExtra("change").toString();
-                double priceVal = getIntent().getDoubleExtra("priceVal", -1);
-                double changeVal = getIntent().getDoubleExtra("changeVal", -1);
+            int editIndex = getIntent().getIntExtra("editIndex", -1);
 
-                if (!getIntent().getStringExtra("upper").equals("")) {
-                    sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
-                }
+            // Runs if the user came from EditStock (checks if the "editIndex" extra exists)
+            if (editIndex != -1)
+                editStock(editIndex);
 
-                if (!getIntent().getStringExtra("lower").equals("")) {
-                    sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
-                }
-
-                sr1.setName(text);
-                sr1.setCityState("Price: $ " + price);
-                sr1.setPhone("Change: $ " + change);
-                sr1.setPrice(priceVal);
-                sr1.setChange(changeVal);
-                sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
-                try {
-                    sr1.threshholdCheck();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                // Updates the SharedPreferences/persistent data right after stock creation
-                SharedPreferences.Editor prefsEditor = preferences.edit();
-                String json = gson.toJson(sr1);
-                prefsEditor.putString("stock" + numStocks, json);
-                numStocks++;
-                prefsEditor.putInt("numStocks", numStocks);
-                prefsEditor.apply();
-
-                stockList.add(sr1);
-            }
+            // Runs if the user came from NewStock
+            else if (getIntent().getStringExtra("price") != null)
+                createNewStock(preferences, gson);
         }
 
         stockLV.setAdapter(new MyCustomBaseAdapter(this, stockList));
@@ -142,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 double price = stockList.get(position).getPrice();
                 double change = stockList.get(position).getChange();
                 int refresh = stockList.get(position).getRefresh();
+                String name = stockList.get(position).getName();
 
                 String upper = String.valueOf(upInt);
                 String lower = String.valueOf(lowInt);
@@ -152,28 +102,102 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("price", price);
                 intent.putExtra("change", change);
                 intent.putExtra("refresh", refresh);
+                intent.putExtra("name", name);
                 startActivity(intent);
             }
         });
     }
 
+
+    /** Helper method that handles when a stock is edited
+     *
+     * @param editIndex the index of the stock being edited
+     */
+    private void editStock(int editIndex) {
+        ActiveStock toEdit = stockList.get(editIndex);
+
+        // Runs if the user told the app to delete the stock
+        if (getIntent().getIntExtra("delete", 0) == 1) {
+            removeStock(editIndex);
+        }
+
+        // Runs if the user told the app to edit the stock
+        else {
+
+            //Sets the new fields (if edited)
+            if (!getIntent().getStringExtra("upper").equals(""))
+                toEdit.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
+
+            if (!getIntent().getStringExtra("lower").equals(""))
+                toEdit.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
+
+            int newRefresh = getIntent().getIntExtra("refresh", 0);
+            if (newRefresh != 0)
+                toEdit.setRefresh(newRefresh);
+        }
+    }
+
+
+    /** Helper method that creates a new stock
+     *
+     * @param preferences The SharedPreferences used to store data
+     * @param gson Used to store objects into preferences
+     */
+    private void createNewStock(SharedPreferences preferences, Gson gson) {
+        ActiveStock sr1 = new ActiveStock();
+
+        // Individually sets all required data fields for the ActiveStock
+        String text = getIntent().getStringExtra("name");
+        String price = getIntent().getStringExtra("price").toString();
+        String change = getIntent().getStringExtra("change").toString();
+        double priceVal = getIntent().getDoubleExtra("priceVal", -1);
+        double changeVal = getIntent().getDoubleExtra("changeVal", -1);
+
+        if (!getIntent().getStringExtra("upper").equals("")) {
+            sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
+        }
+
+        if (!getIntent().getStringExtra("lower").equals("")) {
+            sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
+        }
+
+        sr1.setName(text);
+        sr1.setCityState("Price: $ " + price);
+        sr1.setPhone("Change: $ " + change);
+        sr1.setPrice(priceVal);
+        sr1.setChange(changeVal);
+        sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
+        try {
+            sr1.threshholdCheck();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Updates the SharedPreferences/persistent data right after stock creation
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        String json = gson.toJson(sr1);
+        prefsEditor.putString("stock" + numStocks, json);
+        numStocks++;
+        prefsEditor.putInt("numStocks", numStocks);
+        prefsEditor.apply();
+
+        stockList.add(sr1);
+    }
+
+
+    /** Handles when the "edit stock" button (pencil) is clicked */
     public void editOnClick(View v) {
-        View layout = getLayoutInflater().inflate(R.layout.edit_stock, null);
-        popup.setContentView(layout);
-        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popup.setOutsideTouchable(true);
-        popup.setFocusable(true);
-        popup.showAtLocation(v, Gravity.CENTER, 0, 0);
+        Intent editStock = new Intent(MainActivity.this, EditStock.class);
+
+        int stock_index = (Integer)v.getTag();
+        ActiveStock toEdit = stockList.get(stock_index);
+
+        editStock.putExtra("price", toEdit.getPrice());
+        editStock.putExtra("change", toEdit.getChange());
+        editStock.putExtra("stockNum", stock_index);
+        startActivityForResult(editStock, 2);
     }
 
-    public void confirmEdit(View v) {
-        popup.dismiss();
-    }
-
-    public void deleteStock(View v) {
-        popup.dismiss();
-    }
 
     public void buttonOnClick(View v) {
         Intent makeNewStock = new Intent(MainActivity.this, NewStock.class);
@@ -189,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO implement these 3 methods below once stocks are editable
 
     /** Removes the stock from the app and updates the list
      * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
@@ -203,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("stock" + position);
-        numStocks--;
-        editor.putInt("numStocks", numStocks);
 
         // Rearranges the current sharedPreferences data by "shifting" the key names
         for (int i = position+1; i < numStocks; i++) {
@@ -214,32 +235,11 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("stock" + (i-1), sr);
             editor.remove("stock" + i);
         }
-    }
 
-    /** Updates one of the stock's baselines depending on user interaction
-     * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
-     *
-     * @param position the stock's position in the stockList view (starting at 0)
-     * @param threshold the stock's new threshold
-     * @param up true if the upper threshold is being updated, false if bottom.
-     */
-    private void updateThreshold(int position, double threshold, boolean up) {
-        ActiveStock sr = stockList.get(position);
+        numStocks--;
+        editor.putInt("numStocks", numStocks);
 
-        if (up) sr.setUpper(threshold);
-        else    sr.setLower(threshold);
-    }
-
-    /** Updates the refresh rate depending on user interaction
-     * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
-     * I WILL ALSO TY/SHRAVAN/WHOEVER IS DOING PUSH NOTIFICATIONS TO VERIFY IF ITS OK
-     *
-     * @param position the stock's position in the stockList view (starting at 0)
-     * @param refresh rate
-     */
-    private void updateRefresh(int position, int refresh) {
-        ActiveStock sr = stockList.get(position);
-        sr.setRefresh(refresh);
+        editor.apply();
     }
 
     /* NOT NEEDED BECAUSE ITS STORED DIRECTLY AFTER CREATION INSTEAD

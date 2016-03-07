@@ -35,6 +35,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.quick619.project.MainActivity" />
         </activity>
+        <activity
+            android:name=".EditStock"
+            android:label="I DONT KNOW HOW TO PUT THE STOCK NAME HERE"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.quick619.project.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

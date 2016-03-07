@@ -294,6 +294,7 @@ public class NewStock extends AppCompatActivity {
             intent.putExtra("upper", upperThresh);
             intent.putExtra("lower", lowerThresh);
             intent.putExtra("refresh", refresh);
+            System.out.println(refresh);
 
 
             //New intent info

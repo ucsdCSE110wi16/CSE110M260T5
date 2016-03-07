@@ -41,13 +41,14 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
 
         activeStock = intent.getParcelableExtra("ActiveStock");
-        ticker = intent.getStringExtra("ticker");
-        price = Double.parseDouble(intent.getStringExtra("price"));
-        topThresh = Double.parseDouble(intent.getStringExtra("topThresh"));
-        botThresh = Double.parseDouble(intent.getStringExtra("botThresh"));
-        //refreshRate = (int) Double.parseDouble(intent.getStringExtra("refresh"));
+        ticker = activeStock.getTicker();
+        price = activeStock.getPrice();
+        topThresh = activeStock.getUpper();
+        botThresh = activeStock.getLower();
+        refreshRate = activeStock.getRefresh();
 
         System.out.println(ticker);
+        System.out.println(refreshRate);
 
         threshholdCheck();
 
@@ -57,9 +58,9 @@ public class NotificationService extends Service {
 
     public void threshholdCheck() {
 
-        new CountDownTimer(refreshRate * 60000, refreshRate) {
+        new CountDownTimer(refreshRate * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
-
+                    System.out.println(millisUntilFinished/1000);
             }
 
             public void onFinish() {
@@ -90,12 +91,17 @@ public class NotificationService extends Service {
                      activeStock.setPrice(price);
                      activeStock.setChange(change);
                 }
-                onNotify();
+                //onNotify();
 
                 if(!passed)
                     start();
-                else // Send Crossed Thresh
+                else {
+                    // Send Crossed Thresh
+                    System.out.println(passed);
+                    System.out.println("Price: " + price + " OldPrice: " + oldPrice);
+                    System.out.println("Top: " + topThresh + " Bottom: " + botThresh);
                     onNotify();
+                }
             }
         }.start();
     }

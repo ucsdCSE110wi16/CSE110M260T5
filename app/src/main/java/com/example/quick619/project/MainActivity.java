@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         sr1.setPrice(priceVal);
         sr1.setChange(changeVal);
         sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
+        System.out.println(sr1.getRefresh());
         try {
             sr1.threshholdCheck();
         } catch (IOException e) {

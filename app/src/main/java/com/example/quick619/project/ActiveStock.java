@@ -30,6 +30,7 @@ public class ActiveStock implements Parcelable {
     private double botThresh;
     private double topThresh;
     private int refreshRate = 5;
+    private StockController control;
 
 
 
@@ -81,11 +82,17 @@ public class ActiveStock implements Parcelable {
 
     }
 
-   /* public void setController(StockController control) { this.control = control; }
-    public StockController getController () { return control; }*/
+    public void UpdateStock(){
+
+    }
+
+    public void setController(StockController control) { this.control = control; }
+    public StockController getController () { return control; }
 
     public void setName(String name) { this.ticker = this.name = name; }
     public String getName() { return name; }
+
+    public String getTicker() { return ticker; }
 
     public void setCityState(String cityState) { this.cityState = cityState; }
     public String getCityState() { return cityState; }

@@ -21,7 +21,7 @@ import java.io.IOException;
  * 4: 1 hour            5: 2 hours             6: 1 day             7: 1 week
  */
 
-public class ActiveStock implements Parcelable {
+public class ActiveStock implements Parcelable{
 
     private String ticker;
     private double price;
@@ -30,13 +30,6 @@ public class ActiveStock implements Parcelable {
     private double topThresh;
     private int refreshRate = 5;
     private int index;
-    private StockController control;
-
-
-
-    private String name = "";
-    private String cityState = "";
-    private String phone = "";
 
     public ActiveStock(Parcel in) {
         ticker = in.readString();
@@ -50,6 +43,12 @@ public class ActiveStock implements Parcelable {
 
     public ActiveStock() {
         super();
+    }
+
+    public String toString(){
+        String retString;
+        retString = "Index: " + index + " Name: " + ticker + " Price: " + price;
+        return retString;
     }
 
     @Override
@@ -84,26 +83,11 @@ public class ActiveStock implements Parcelable {
 
     }
 
-    public void UpdateStock(){
-
-    }
-
     public void setIndex(int index){ this.index = index;}
     public int getIndex(){ return index;}
 
-    public void setController(StockController control) { this.control = control; }
-    public StockController getController () { return control; }
-
-    public void setName(String name) { this.ticker = this.name = name; }
-    public String getName() { return name; }
-
+    public void setTicker(String name) { this.ticker = name; }
     public String getTicker() { return ticker; }
-
-    public void setCityState(String cityState) { this.cityState = cityState; }
-    public String getCityState() { return cityState; }
-
-    public void setPhone(String phone) { this.phone = phone; }
-    public String getPhone() { return phone; }
 
     public void setUpper(double upper) { this.topThresh = upper; }
     public double getUpper() { return topThresh; }

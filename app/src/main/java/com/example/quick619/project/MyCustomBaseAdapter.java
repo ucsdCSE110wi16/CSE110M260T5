@@ -1,8 +1,7 @@
 package com.example.quick619.project;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.media.Image;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +54,25 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.txtName.setText(searchArrayList.get(position).getName());
-        holder.txtCityState.setText(searchArrayList.get(position).getCityState());
-        holder.txtPhone.setText(searchArrayList.get(position).getPhone());
+        String sign = "";
+
+        if(searchArrayList.get(position).getChange() > 0){
+            holder.txtPhone.setTextColor(Color.GREEN);
+            sign = "+";
+        }
+        else if(searchArrayList.get(position).getChange() < 0) {
+            holder.txtPhone.setTextColor(Color.RED);
+            sign = "-";
+        }
+
+        else {
+            holder.txtPhone.setTextColor(Color.GRAY);
+            sign = "";
+        }
+
+        holder.txtName.setText(searchArrayList.get(position).getTicker());
+        holder.txtCityState.setText("Price: $" + Double.toString(searchArrayList.get(position).getPrice()));
+        holder.txtPhone.setText("Change: " + sign + "$" + Double.toString(Math.abs(searchArrayList.get(position).getChange())));
 
         return convertView;
     }

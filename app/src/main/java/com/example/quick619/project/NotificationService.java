@@ -7,10 +7,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -88,9 +91,7 @@ public class NotificationService extends Service {
                     }
 
                     //Send update
-                    System.out.println("Sending Update: " + ticker + " - " + oldPrice + " vs " + price);
-                    activeStock.setPrice(price);
-                    activeStock.setChange(change);
+                    UpdateStock(oldPrice);
 
                     //startActivity(new Intent(, MainActivity.class));
 
@@ -108,6 +109,21 @@ public class NotificationService extends Service {
                 }
             }
         }.start();
+    }
+
+    public void UpdateStock(double oldPrice){
+        //Updates the preferences by storing the given stock
+        System.out.println("Sending Update: " + ticker + " - " + oldPrice + " vs " + price);
+        activeStock.setPrice(price);
+        activeStock.setChange(change);
+
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        Gson gson = new Gson();
+        System.out.println(activeStock.getTicker() + "- At Index: " + activeStock.getIndex());
+        String json = gson.toJson(activeStock);
+        prefsEditor.putString("stock" + activeStock.getIndex(), json);
+        prefsEditor.apply();
     }
 
     public void onNotify(){

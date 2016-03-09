@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // Accesses the persistent data and recreates the stock list
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Gson gson = new Gson();
         numStocks = preferences.getInt("numStocks", -1);
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 String json = preferences.getString("stock" + i, "");
                 ActiveStock sr = gson.fromJson(json, ActiveStock.class);
                 stockList.add(sr);
-                System.out.println("Generating stocks: " + sr.getIndex() + " " + sr.getTicker());
+                System.out.println(sr);
             }
         }
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 double price = stockList.get(position).getPrice();
                 double change = stockList.get(position).getChange();
                 int refresh = stockList.get(position).getRefresh();
-                String name = stockList.get(position).getName();
+                String name = stockList.get(position).getTicker();
 
                 String upper = String.valueOf(upInt);
                 String lower = String.valueOf(lowInt);
@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
      * @param gson Used to store objects into preferences
      */
     private void createNewStock(SharedPreferences preferences, Gson gson) {
+
         ActiveStock sr1 = new ActiveStock();
 
         // Individually gets all required data fields for the ActiveStock
@@ -148,9 +149,7 @@ public class MainActivity extends AppCompatActivity {
         int index = stockList.size();
 
         //Then it sets these fields in the ActiveStock instance
-        sr1.setName(text);
-        sr1.setCityState("Price: $ " + price);
-        sr1.setPhone("Change: $ " + change);
+        sr1.setTicker(text);
         sr1.setPrice(priceVal);
         sr1.setChange(changeVal);
         sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Removes the stock from the ArrayList and the persistent data/sharedPreferences
         stockList.remove(position);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("stock" + position);
 
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
     public void StoreData(ActiveStock sr1){
 
         //Updates the preferences by storing the given stock
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = preferences.edit();
         Gson gson = new Gson();
 
@@ -259,43 +258,4 @@ public class MainActivity extends AppCompatActivity {
         }
         prefsEditor.apply();
     }
-
-
-
-    /* NOT NEEDED BECAUSE ITS STORED DIRECTLY AFTER CREATION INSTEAD
-     *
-     *
-    // Credit to http://stackoverflow.com/questions/151777/saving-activity-state-on-android
-    // Answer #4
-    // Allows for persistent data
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-
-        editor.apply();
-
-
-        editor.putInt("numStocks", numStocks);
-
-        // Stores all stock names, prices, changes, and thresholds
-        for (int i = 0; i < numStocks; i++) {
-            editor.putLong("price" + String.valueOf(i),
-                    Double.doubleToRawLongBits(stockList.get(i).getPrice()));
-            editor.putLong("change" + String.valueOf(i),
-                    Double.doubleToRawLongBits(stockList.get(i).getChange()));
-            editor.putLong("upper" + String.valueOf(i),
-                    Double.doubleToRawLongBits(stockList.get(i).getUpper()));
-            editor.putLong("lower" + String.valueOf(i),
-                    Double.doubleToRawLongBits(stockList.get(i).getLower()));
-
-            editor.putString("name" + String.valueOf(i), stockList.get(i).getName());
-            editor.putInt("refresh" + String.valueOf(i), stockList.get(i).getRefresh());
-        }
-
-        // Commit to storage
-        editor.apply();
-
-    }
-*/
 }

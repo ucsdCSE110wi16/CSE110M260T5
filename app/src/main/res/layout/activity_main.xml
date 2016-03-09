@@ -7,16 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#232222">
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/stockList"
         android:clickable="true"
         android:contextClickable="false"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:dividerHeight="1dp"
+        android:divider="#2930b8"
+        android:layout_above="@+id/button3"
+        android:drawSelectorOnTop="false" />
 
 
     <ImageButton
@@ -24,12 +29,14 @@
         android:layout_height="wrap_content"
         android:text="@string/button3"
         android:id="@+id/button3"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:onClick="buttonOnClick"
         android:src="@mipmap/custom_plus"
-        android:background="#ececec"
-        android:foregroundGravity="top" />
+        android:foregroundGravity="top"
+        android:tint="#00cf23"
+        android:tintMode="screen"
+        android:adjustViewBounds="false"
+        android:background="#00ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

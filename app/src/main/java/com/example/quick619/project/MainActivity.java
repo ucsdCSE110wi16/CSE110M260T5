@@ -12,7 +12,6 @@ import android.widget.ListView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -123,6 +122,17 @@ public class MainActivity extends AppCompatActivity {
             int newRefresh = getIntent().getIntExtra("refresh", 0);
             if (newRefresh != 0)
                 toEdit.setRefresh(newRefresh);
+
+
+            //Save the data
+            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor prefsEditor = preferences.edit();
+            Gson gson = new Gson();
+
+            String json = gson.toJson(stockList.get(editIndex));
+            prefsEditor.putString("stock" + editIndex, json);
+            prefsEditor.apply();
+
         }
     }
 
@@ -135,54 +145,40 @@ public class MainActivity extends AppCompatActivity {
     private void createNewStock(SharedPreferences preferences, Gson gson) {
         ActiveStock sr1 = new ActiveStock();
 
-        // Individually sets all required data fields for the ActiveStock
+        // Individually gets all required data fields for the ActiveStock
         String text = getIntent().getStringExtra("name");
         String price = getIntent().getStringExtra("price").toString();
         String change = getIntent().getStringExtra("change").toString();
         double priceVal = getIntent().getDoubleExtra("priceVal", -1);
         double changeVal = getIntent().getDoubleExtra("changeVal", -1);
+        int index = stockList.size();
 
-        if (!getIntent().getStringExtra("upper").equals("")) {
-            sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
-        }
-
-        if (!getIntent().getStringExtra("lower").equals("")) {
-            sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
-        }
-
+        //Then it sets these fields in the ActiveStock instance
         sr1.setName(text);
         sr1.setCityState("Price: $ " + price);
         sr1.setPhone("Change: $ " + change);
         sr1.setPrice(priceVal);
         sr1.setChange(changeVal);
         sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
-        System.out.println(sr1.getRefresh());
-        try {
-            sr1.threshholdCheck();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!getIntent().getStringExtra("upper").equals("")) {
+            sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
         }
+        if (!getIntent().getStringExtra("lower").equals("")) {
+            sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
+        }
+        sr1.setIndex(index);
+
+        //Start service for the stock update timer
 
         Intent myService = new Intent(this, NotificationService.class);
-
         myService.putExtra("ActiveStock", sr1);
-        myService.putExtra("ticker", text);
-        myService.putExtra("price", price);
-        myService.putExtra("topThresh", getIntent().getStringExtra("upper"));
-        myService.putExtra("botThresh", getIntent().getStringExtra("lower"));
-        myService.putExtra("refresh", sr1.getRefresh());
         startService(myService);
 
+        //Add stock to stock list
+        stockList.add(sr1);
 
         // Updates the SharedPreferences/persistent data right after stock creation
-        SharedPreferences.Editor prefsEditor = preferences.edit();
-        String json = gson.toJson(sr1);
-        prefsEditor.putString("stock" + numStocks, json);
-        numStocks++;
-        prefsEditor.putInt("numStocks", numStocks);
-        prefsEditor.apply();
-
-        stockList.add(sr1);
+        StoreData(preferences, gson, sr1);
     }
 
 
@@ -243,6 +239,20 @@ public class MainActivity extends AppCompatActivity {
 
         editor.apply();
     }
+
+    public void StoreData(SharedPreferences preferences, Gson gson, ActiveStock sr1){
+
+        //Updates the preferences by storing the given stock
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        String json = gson.toJson(sr1);
+        prefsEditor.putString("stock" + numStocks, json);
+        numStocks++;
+        prefsEditor.putInt("numStocks", numStocks);
+        prefsEditor.apply();
+
+    }
+
+
 
     /* NOT NEEDED BECAUSE ITS STORED DIRECTLY AFTER CREATION INSTEAD
      *

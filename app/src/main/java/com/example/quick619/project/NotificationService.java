@@ -58,7 +58,7 @@ public class NotificationService extends Service {
 
     public void threshholdCheck() {
 
-        new CountDownTimer(refreshRate * 60000, 1000) {
+        new CountDownTimer(refreshRate * 2000, 1000) {
             public void onTick(long millisUntilFinished) {
                     System.out.println(millisUntilFinished/1000);
             }
@@ -66,7 +66,7 @@ public class NotificationService extends Service {
             public void onFinish() {
                 double oldPrice = price;
                 try {
-                    price = quote.getprice(ticker);
+                    price = quote.getprice(ticker) + 1.00;
                     price = Double.parseDouble(numberFormat.format(price));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -88,8 +88,10 @@ public class NotificationService extends Service {
                     }
 
                     //Send update
-                     activeStock.setPrice(price);
-                     activeStock.setChange(change);
+                    System.out.println("Sending Update: " + ticker + " - " + oldPrice + " vs " + price);
+                    activeStock.setPrice(price);
+                    activeStock.setChange(change);
+
                 }
                 //onNotify();
 

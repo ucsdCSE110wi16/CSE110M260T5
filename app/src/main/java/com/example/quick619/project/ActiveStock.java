@@ -24,12 +24,12 @@ import java.io.IOException;
 public class ActiveStock implements Parcelable {
 
     private String ticker;
-   // private StockController control = new StockController();
     private double price;
     private double change;
     private double botThresh;
     private double topThresh;
     private int refreshRate = 5;
+    private int index;
     private StockController control;
 
 
@@ -45,6 +45,7 @@ public class ActiveStock implements Parcelable {
         botThresh = in.readDouble();
         topThresh = in.readDouble();
         refreshRate = in.readInt();
+        index = in.readInt();
     }
 
     public ActiveStock() {
@@ -65,6 +66,7 @@ public class ActiveStock implements Parcelable {
         out.writeDouble(botThresh);
         out.writeDouble(topThresh);
         out.writeInt(refreshRate);
+        out.writeInt(index);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
@@ -85,6 +87,9 @@ public class ActiveStock implements Parcelable {
     public void UpdateStock(){
 
     }
+
+    public void setIndex(int index){ this.index = index;}
+    public int getIndex(){ return index;}
 
     public void setController(StockController control) { this.control = control; }
     public StockController getController () { return control; }

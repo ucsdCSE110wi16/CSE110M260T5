@@ -92,6 +92,8 @@ public class NotificationService extends Service {
                     activeStock.setPrice(price);
                     activeStock.setChange(change);
 
+                    //startActivity(new Intent(, MainActivity.class));
+
                 }
                 //onNotify();
 
@@ -110,7 +112,7 @@ public class NotificationService extends Service {
 
     public void onNotify(){
 
-        System.err.println("THIS IS ACTUALLY WORKING");
+        System.err.println("Notification is sending for: " + ticker);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("RSSPullService");
 

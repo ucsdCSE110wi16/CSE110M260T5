@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 String json = preferences.getString("stock" + i, "");
                 ActiveStock sr = gson.fromJson(json, ActiveStock.class);
                 stockList.add(sr);
+                System.out.println("Generating stocks: " + sr.getIndex() + " " + sr.getTicker());
             }
         }
 
@@ -125,14 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //Save the data
-            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor prefsEditor = preferences.edit();
-            Gson gson = new Gson();
-
-            String json = gson.toJson(stockList.get(editIndex));
-            prefsEditor.putString("stock" + editIndex, json);
-            prefsEditor.apply();
-
+            StoreData(toEdit);
         }
     }
 
@@ -178,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         stockList.add(sr1);
 
         // Updates the SharedPreferences/persistent data right after stock creation
-        StoreData(preferences, gson, sr1);
+        StoreData(sr1);
     }
 
 
@@ -230,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             String sr = preferences.getString("stock" + i, "");
 
             // Changes the key name so it is consistent with the shifting ArrayList
-            editor.putString("stock" + (i-1), sr);
+            editor.putString("stock" + (i - 1), sr);
             editor.remove("stock" + i);
         }
 
@@ -238,18 +232,32 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("numStocks", numStocks);
 
         editor.apply();
+
+        for (int i = 0; i < stockList.size(); i++){
+            ActiveStock temp = stockList.get(i);
+            System.out.println("Size " + stockList.size() + " Index " + temp.getIndex() + " Ticker: " + temp.getTicker());
+            temp.setIndex(i);
+            StoreData(temp);
+            System.out.println(temp.getIndex());
+        }
     }
 
-    public void StoreData(SharedPreferences preferences, Gson gson, ActiveStock sr1){
+    public void StoreData(ActiveStock sr1){
 
         //Updates the preferences by storing the given stock
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = preferences.edit();
-        String json = gson.toJson(sr1);
-        prefsEditor.putString("stock" + numStocks, json);
-        numStocks++;
-        prefsEditor.putInt("numStocks", numStocks);
-        prefsEditor.apply();
+        Gson gson = new Gson();
 
+        System.out.println(sr1.getTicker() + "- At Index: " + sr1.getIndex());
+
+        String json = gson.toJson(stockList.get(sr1.getIndex()));
+        prefsEditor.putString("stock" + sr1.getIndex(), json);
+        if(sr1.getIndex() == numStocks){
+            numStocks++;
+            prefsEditor.putInt("numStocks", numStocks);
+        }
+        prefsEditor.apply();
     }
 
 

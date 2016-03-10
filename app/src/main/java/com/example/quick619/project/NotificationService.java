@@ -9,113 +9,133 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Created by Ty on 3/6/2016.
  */
 public class NotificationService extends Service {
 
-    private String ticker;
-    private getquote quote = new getquote();
-    private int refreshRate = 5;
-    private double botThresh;
-    private double topThresh;
-    private double crossedThresh;
-    private double price;
-    private double change;
-    private boolean passed = false;
-    DecimalFormat numberFormat = new DecimalFormat("#.00");
+    private final IBinder myBinder = new NotificationBinder();
+    private ArrayList<ActiveStock> list;
+    private boolean Destroy = false;
 
-    private ActiveStock activeStock;
-
-
-    private String name = "";
-    private String cityState = "";
-    private String phone = "";
 
     public int onStartCommand(Intent intent, int flags, int startId){
 
-        activeStock = intent.getParcelableExtra("ActiveStock");
-        ticker = activeStock.getTicker();
-        price = activeStock.getPrice();
-        topThresh = activeStock.getUpper();
-        botThresh = activeStock.getLower();
-        refreshRate = activeStock.getRefresh();
-
-        System.out.println(ticker);
-        System.out.println(refreshRate);
-
-        threshholdCheck();
-
+        System.out.println(startId);
+        list = new ArrayList<>();
+        TimerStart();
         return flags;
     }
 
+    public class NotificationBinder extends Binder {
+        NotificationService getService() {
+            // Return this instance of NotificationService so clients can call public methods
+            return NotificationService.this;
+        }
+    }
 
-    public void threshholdCheck() {
+    @Override
+    public IBinder onBind(Intent intent) {
+        return myBinder;
+    }
+    @Override
+    public boolean onUnbind(Intent intent) {
+        // All clients have unbound with unbindService()
+        System.out.println("UNBINDED FROM WITHIN SERVICE");
+        return false;
+    }
 
-        new CountDownTimer(refreshRate * 2000, 1000) {
+    @Override
+    public void onRebind(Intent intent) {
+        // A client is binding to the service with bindService(),
+        // after onUnbind() has already been called
+    }
+    @Override
+    public void onDestroy() {
+        // The service is no longer used and is being destroyed
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        Gson gson = new Gson();
+
+        for(int i = 0; i < list.size(); i++){
+            String json = gson.toJson(list.get(i));
+            prefsEditor.putString("stock" + i, json);
+            System.out.println("Saving Before Destroy: " + list.get(i));
+        }
+
+        prefsEditor.apply();
+        Destroy = true;
+        System.out.println("Service is being stopped");
+    }
+
+
+
+    public void AddStock(ActiveStock activeStock){
+        list.add(activeStock);
+    }
+
+    public void RemoveStock(int position){
+        list.remove(position);
+    }
+
+    private void TimerStart() {
+
+        new CountDownTimer(100000, 1000) {
             public void onTick(long millisUntilFinished) {
-                    System.out.println(millisUntilFinished/1000);
+                    //System.out.println(millisUntilFinished/1000);
+
+                    if(Destroy) this.cancel();
+                    if(!list.isEmpty())
+                    {
+                        for(int i = 0; i < list.size(); i++)
+                        {
+                            boolean priceChanged = false;
+                            boolean thresholdPassed;
+                            ActiveStock tempStock = list.get(i);
+
+                            System.out.println(tempStock.getCurrentCount() + "/" + tempStock.getRefresh() * 2 + tempStock);
+                            tempStock.tickCurrentCount();
+
+                            if(tempStock.getCurrentCount() == tempStock.getRefresh() * 2){
+                                tempStock.resetCurrentCount();
+                                try {
+                                    priceChanged = tempStock.PriceCheck();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if(priceChanged){
+                                    UpdateStock(i);
+                                    thresholdPassed = tempStock.ThresholdCheck();
+                                    if(thresholdPassed){
+                                        onNotify(i);
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
             }
 
             public void onFinish() {
-                double oldPrice = price;
-                try {
-                    price = quote.getprice(ticker) + 1.00;
-                    price = Double.parseDouble(numberFormat.format(price));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (price >= topThresh) {
-                    passed = true;
-                    crossedThresh = topThresh;
-                } else if (price <= botThresh) {
-                    passed = true;
-                    crossedThresh = botThresh;
-                }
-                if (oldPrice != price)
-                {
-                    try {
-                        change = quote.getchange(ticker);
-                        change = Double.parseDouble(numberFormat.format(change));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    //Send update
-                    UpdateStock(oldPrice);
-
-                    //startActivity(new Intent(, MainActivity.class));
-
-                }
-                //onNotify();
-
-                if(!passed)
-                    start();
-                else {
-                    // Send Crossed Thresh
-                    System.out.println(passed);
-                    System.out.println("Price: " + price + " OldPrice: " + oldPrice);
-                    System.out.println("Top: " + topThresh + " Bottom: " + botThresh);
-                    onNotify();
-                }
+                if(!Destroy) start();
             }
         }.start();
     }
 
-    public void UpdateStock(double oldPrice){
+    private void UpdateStock(int index){
+        ActiveStock activeStock = list.get(index);
         //Updates the preferences by storing the given stock
-        System.out.println("Sending Update: " + ticker + " - " + oldPrice + " vs " + price);
-        activeStock.setPrice(price);
-        activeStock.setChange(change);
+        System.out.println("Sending Update: " + activeStock.getTicker() + "Price: " + activeStock.getPrice());
 
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = preferences.edit();
@@ -126,9 +146,10 @@ public class NotificationService extends Service {
         prefsEditor.apply();
     }
 
-    public void onNotify(){
+    private void onNotify(int index){
 
-        System.err.println("Notification is sending for: " + ticker);
+        ActiveStock activeStock = list.get(index);
+        System.err.println("Notification is sending for: " + activeStock.getTicker());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("RSSPullService");
 
@@ -139,8 +160,8 @@ public class NotificationService extends Service {
         Notification.Builder builder;
 
         builder = new Notification.Builder (context)
-                .setContentTitle(ticker)
-                .setContentText(ticker + ": is at price: $" + price + " and has passed threshold of: $" + crossedThresh + ".")
+                .setContentTitle(activeStock.getTicker())
+                .setContentText(activeStock.getTicker() + ": is at price: $" + activeStock.getPrice())
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true)
@@ -151,12 +172,4 @@ public class NotificationService extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
     }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-
 }

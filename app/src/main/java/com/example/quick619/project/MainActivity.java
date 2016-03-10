@@ -1,8 +1,12 @@
 package com.example.quick619.project;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<ActiveStock> stockList = new ArrayList<>();   // Holds the list of stocks
     int numStocks = 0;
+    NotificationService mService;
+    boolean mBound = false;
+    Intent myService;
+    Context c;
 
 
     @Override
@@ -39,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         Gson gson = new Gson();
         numStocks = preferences.getInt("numStocks", -1);
+
+
+        myService = new Intent(this, NotificationService.class);
+
+        c = getApplicationContext();
+        boolean boo = c.stopService(myService);
+        System.out.println("Service Stopped = " + boo);
+        c.startService(myService);
+        c.bindService(myService, mConnection, Context.BIND_AUTO_CREATE);
 
         if (numStocks == -1) {
             numStocks = 0;
@@ -97,6 +114,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            c.unbindService(mConnection);
+            mBound = false;
+            System.out.println("ACTIVITY HAS STOPPED, UNBINDING FROM SERVICE");
+            // FOR SOME REASON THIS ISN'T DISCONNECTING FROM THE SERVICE :/
+        }
+    }
 
     /** Helper method that handles when a stock is edited
      *
@@ -138,34 +166,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private void createNewStock(SharedPreferences preferences, Gson gson) {
 
-        ActiveStock sr1 = new ActiveStock();
-
         // Individually gets all required data fields for the ActiveStock
-        String text = getIntent().getStringExtra("name");
-        String price = getIntent().getStringExtra("price").toString();
-        String change = getIntent().getStringExtra("change").toString();
+        String text = getIntent().getStringExtra("name");;
         double priceVal = getIntent().getDoubleExtra("priceVal", -1);
         double changeVal = getIntent().getDoubleExtra("changeVal", -1);
+        double topThresh = 0;
+        if (!getIntent().getStringExtra("upper").equals("")) {
+            topThresh = Double.valueOf(getIntent().getStringExtra("upper"));
+        }
+        double botThresh = 0;
+        if (!getIntent().getStringExtra("lower").equals("")) {
+            botThresh = Double.valueOf(getIntent().getStringExtra("lower"));
+        }
+        int refresh = getIntent().getIntExtra("refresh", 0);
         int index = stockList.size();
 
-        //Then it sets these fields in the ActiveStock instance
-        sr1.setTicker(text);
-        sr1.setPrice(priceVal);
-        sr1.setChange(changeVal);
-        sr1.setRefresh(getIntent().getIntExtra("refresh", 0));
-        if (!getIntent().getStringExtra("upper").equals("")) {
-            sr1.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
-        }
-        if (!getIntent().getStringExtra("lower").equals("")) {
-            sr1.setLower(Double.valueOf(getIntent().getStringExtra("lower")));
-        }
-        sr1.setIndex(index);
-
-        //Start service for the stock update timer
-
-        Intent myService = new Intent(this, NotificationService.class);
-        myService.putExtra("ActiveStock", sr1);
-        startService(myService);
+        //Then it constructs the stock with this info
+        ActiveStock sr1 = new ActiveStock(getApplicationContext(), text, priceVal, changeVal, botThresh, topThresh, refresh, index);
 
         //Add stock to stock list
         stockList.add(sr1);
@@ -214,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Removes the stock from the ArrayList and the persistent data/sharedPreferences
         stockList.remove(position);
+        if(mBound) mService.RemoveStock(position);
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("stock" + position);
@@ -258,4 +276,31 @@ public class MainActivity extends AppCompatActivity {
         }
         prefsEditor.apply();
     }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to NotificationService, cast the IBinder and get NotificationService instance
+            NotificationService.NotificationBinder binder = (NotificationService.NotificationBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            System.out.println("BINDED WITH SERVICE");
+
+
+            for(int i = 0; i < stockList.size(); i++){
+                if(mBound)
+                {
+                    mService.AddStock(stockList.get(i));
+                }
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+            System.out.println("UNBINDED FROM SERVICE");
+        }
+    };
 }

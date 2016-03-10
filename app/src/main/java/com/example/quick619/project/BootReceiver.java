@@ -13,5 +13,6 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i("Messaged Received", "OHH");
         context.startService(new Intent(context, NotificationService.class));
+        System.out.println("SYSTEM HAS BOOTED");
     }
 }

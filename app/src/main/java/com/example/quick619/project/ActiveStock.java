@@ -1,9 +1,9 @@
 package com.example.quick619.project;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.Context;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 
 /**
@@ -21,7 +21,7 @@ import java.io.IOException;
  * 4: 1 hour            5: 2 hours             6: 1 day             7: 1 week
  */
 
-public class ActiveStock implements Parcelable{
+public class ActiveStock {
 
     private String ticker;
     private double price;
@@ -30,58 +30,58 @@ public class ActiveStock implements Parcelable{
     private double topThresh;
     private int refreshRate = 5;
     private int index;
+    private int currentCount = 0;
+    private boolean passed;
+    private double crossedThresh;
+    DecimalFormat numberFormat = new DecimalFormat("0.00");
 
-    public ActiveStock(Parcel in) {
-        ticker = in.readString();
-        price = in.readDouble();
-        change = in.readDouble();
-        botThresh = in.readDouble();
-        topThresh = in.readDouble();
-        refreshRate = in.readInt();
-        index = in.readInt();
-    }
+    public ActiveStock(Context context, String ticker, double price, double change, double botThresh, double topThresh, int refreshRate, int index) {
 
-    public ActiveStock() {
-        super();
+        this.ticker = ticker;
+        this.price = price;
+        this.change = change;
+        this.botThresh = botThresh;
+        this.topThresh = topThresh;
+        this.refreshRate = refreshRate;
+        this.index = index;
+
     }
 
     public String toString(){
         String retString;
-        retString = "Index: " + index + " Name: " + ticker + " Price: " + price;
+        retString = "Index: " + index + " Name: " + ticker + " Price: " + price + " Refresh: " + refreshRate;
         return retString;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+    public boolean PriceCheck() throws IOException {
+        getquote quote = new getquote();
+        double oldPrice = price;
+        price = quote.getprice(ticker);
+        price = Double.parseDouble(numberFormat.format(price));
 
-    // write your object's data to the passed-in Parcel
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(ticker);
-        out.writeDouble(price);
-        out.writeDouble(change);
-        out.writeDouble(botThresh);
-        out.writeDouble(topThresh);
-        out.writeInt(refreshRate);
-        out.writeInt(index);
-    }
-
-    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-    public static final Parcelable.Creator<ActiveStock> CREATOR = new Parcelable.Creator<ActiveStock>() {
-        public ActiveStock createFromParcel(Parcel in) {
-            return new ActiveStock(in);
+        if (oldPrice != price) {
+            change = quote.getchange(ticker);
+            change = Double.parseDouble(numberFormat.format(change));
+            //Send update
+            return true;
         }
-
-        public ActiveStock[] newArray(int size) {
-            return new ActiveStock[size];
-        }
-    };
-
-    public void threshholdCheck() throws IOException{
-
+        return false;
     }
+
+    public boolean ThresholdCheck(){
+        if (price >= topThresh) {
+            passed = true;
+            crossedThresh = topThresh;
+        } else if (price <= botThresh) {
+            passed = true;
+            crossedThresh = botThresh;
+        }
+        return passed;
+    }
+
+    public void resetCurrentCount(){ currentCount = 0;}
+    public void tickCurrentCount(){ currentCount++;}
+    public int getCurrentCount() {return currentCount;}
 
     public void setIndex(int index){ this.index = index;}
     public int getIndex(){ return index;}

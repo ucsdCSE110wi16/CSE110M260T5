@@ -50,7 +50,7 @@ public class NewStock extends AppCompatActivity {
     double my_change = 0;   //store change
     int refresh = 0;
     int index = 0;
-    DecimalFormat numberFormat = new DecimalFormat("#.00");
+    DecimalFormat numberFormat = new DecimalFormat("0.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,13 +175,15 @@ public class NewStock extends AppCompatActivity {
                 }
                 //Price will be < 0 if the stock doesn't exist
                 if (my_price < 0) {
-                    text_price.setText("Error");
-                    text_change.setText("Error");
+                    text_price.setText("Symbol Not Found");
+                    text_change.setText("Please Try a Different Symbol");
+                    my_change = 0;
                 }
                 //Set the text fields for Price and Change
-                else
+                else {
                     text_price.setText(Double.toString(my_price));
-                text_change.setText(Double.toString(my_change));
+                    text_change.setText(Double.toString(my_change));
+                }
 
                 //Set color of change text
                 if (my_change > 0)
@@ -210,6 +212,8 @@ public class NewStock extends AppCompatActivity {
 
     //Initialize the Search Results List
     public void initList (String pathname) throws IOException {
+
+        stopService(new Intent(this, NotificationService.class));
 
         AssetManager am = getAssets();
         InputStream file = am.open("NASDAQ.txt");

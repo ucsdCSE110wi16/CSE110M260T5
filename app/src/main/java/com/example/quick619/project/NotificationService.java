@@ -26,6 +26,9 @@ public class NotificationService extends Service {
     private final IBinder myBinder = new NotificationBinder();
     private ArrayList<ActiveStock> list;
     private boolean Destroy = false;
+    final private int oneSECONDS = 1000;
+    final private int sixtySECONDS = 60000;
+
 
 
     public int onStartCommand(Intent intent, int flags, int startId){
@@ -89,7 +92,7 @@ public class NotificationService extends Service {
 
     private void TimerStart() {
 
-        new CountDownTimer(100000, 1000) {
+        new CountDownTimer(sixtySECONDS * 5, oneSECONDS) {
             public void onTick(long millisUntilFinished) {
                     //System.out.println(millisUntilFinished/1000);
 
@@ -105,7 +108,7 @@ public class NotificationService extends Service {
                             System.out.println(tempStock.getCurrentCount() + "/" + tempStock.getRefresh() * 2 + tempStock);
                             tempStock.tickCurrentCount();
 
-                            if(tempStock.getCurrentCount() == tempStock.getRefresh() * 2){
+                            if(tempStock.getCurrentCount() == tempStock.getRefresh() * sixtySECONDS){
                                 tempStock.resetCurrentCount();
                                 try {
                                     priceChanged = tempStock.PriceCheck();

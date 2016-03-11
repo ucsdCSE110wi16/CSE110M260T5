@@ -23,8 +23,12 @@ public class StockInformation extends AppCompatActivity {
         double price = getIntent().getDoubleExtra("price", 0);
         double change = getIntent().getDoubleExtra("change", 0);
 
+
         TextView name = (TextView)findViewById(R.id.tickerName);
         name.setText(updateName());
+
+        TextView companyName = (TextView)findViewById(R.id.companyName);
+        companyName.setText(updateCompanyName());
 
         TextView upper= (TextView)findViewById(R.id.upperThresh);
         upper.setText(updateUpper());
@@ -32,17 +36,24 @@ public class StockInformation extends AppCompatActivity {
         TextView lower= (TextView)findViewById(R.id.lowerThresh);
         lower.setText(updateLower());
 
+        String sign = "";
+        //Set color of change text
+        if (change > 0) {
+            text_change.setTextColor(Color.GREEN);
+            sign = "+";
+        }
+        else if (change == 0) {
+            text_change.setTextColor(Color.GRAY);
+            sign = "";
+        }
+        else {
+            text_change.setTextColor(Color.RED);
+            sign = "";
+        }
+
         //Set the text fields for Price and Change
         text_price.setText("$" + Double.toString(price));
-        text_change.setText(Double.toString(change));
-
-        //Set color of change text
-        if (change > 0)
-            text_change.setTextColor(Color.parseColor("#FF1DB318"));
-        else if (change == 0)
-            text_change.setTextColor(Color.GRAY);
-        else
-            text_change.setTextColor(Color.RED);
+        text_change.setText(sign + Double.toString(change));
     }
 
     private String updateUpper(){
@@ -58,5 +69,10 @@ public class StockInformation extends AppCompatActivity {
     private String updateName(){
         String name = getIntent().getStringExtra("name");
         return name;
+    }
+
+    private String updateCompanyName(){
+        String companyName = getIntent().getStringExtra("companyName");
+        return companyName;
     }
 }

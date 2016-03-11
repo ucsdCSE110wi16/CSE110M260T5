@@ -46,8 +46,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             editButton.setTag(position);
 
             holder.txtName = (TextView) convertView.findViewById(R.id.name);
-            holder.txtCityState = (TextView) convertView.findViewById(R.id.cityState);
-            holder.txtPhone = (TextView) convertView.findViewById(R.id.phone);
+            holder.txtCityState = (TextView) convertView.findViewById(R.id.main_price);
+            holder.txtPhone = (TextView) convertView.findViewById(R.id.main_change);
 
             convertView.setTag(holder);
         } else {
@@ -62,7 +62,7 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         }
         else if(searchArrayList.get(position).getChange() < 0) {
             holder.txtPhone.setTextColor(Color.RED);
-            sign = "-";
+            sign = "";
         }
 
         else {
@@ -71,8 +71,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         }
 
         holder.txtName.setText(searchArrayList.get(position).getTicker());
-        holder.txtCityState.setText("Price: $" + Double.toString(searchArrayList.get(position).getPrice()));
-        holder.txtPhone.setText("Change: " + sign + "$" + Double.toString(Math.abs(searchArrayList.get(position).getChange())));
+        holder.txtCityState.setText("$" + Double.toString(searchArrayList.get(position).getPrice()));
+        holder.txtPhone.setText(sign + Double.toString(searchArrayList.get(position).getChange()));
 
         return convertView;
     }

@@ -1,7 +1,5 @@
 package com.example.quick619.project;
 
-import android.content.Context;
-
 import java.io.IOException;
 import java.text.DecimalFormat;
 
@@ -23,6 +21,7 @@ import java.text.DecimalFormat;
 
 public class ActiveStock {
 
+
     private String ticker;
     private double price;
     private double change;
@@ -33,9 +32,11 @@ public class ActiveStock {
     private int currentCount = 0;
     private boolean passed;
     private double crossedThresh;
+    private String companyName;
+    private long prevTime;
     DecimalFormat numberFormat = new DecimalFormat("0.00");
 
-    public ActiveStock(Context context, String ticker, double price, double change, double botThresh, double topThresh, int refreshRate, int index) {
+    public ActiveStock(String ticker, double price, double change, double botThresh, double topThresh, int refreshRate, int index, String companyName) {
 
         this.ticker = ticker;
         this.price = price;
@@ -44,12 +45,14 @@ public class ActiveStock {
         this.topThresh = topThresh;
         this.refreshRate = refreshRate;
         this.index = index;
+        this.companyName = companyName;
+        prevTime = System.currentTimeMillis();
 
     }
 
     public String toString(){
         String retString;
-        retString = "Index: " + index + " Name: " + ticker + " Price: " + price + " Refresh: " + refreshRate;
+        retString = "Index: " + index + " Name: " + ticker + " Price: " + price + " Refresh: " + refreshRate + " CompanyName: " + companyName;
         return retString;
     }
 
@@ -80,8 +83,16 @@ public class ActiveStock {
     }
 
     public void resetCurrentCount(){ currentCount = 0;}
-    public void tickCurrentCount(){ currentCount++;}
+    public void tickCurrentCount(){
+
+        long curTime = System.currentTimeMillis();
+        int change = Math.round((curTime - prevTime) / 1000);
+        prevTime = curTime;
+        currentCount += change;
+    }
     public int getCurrentCount() {return currentCount;}
+
+    public String getCompanyName(){ return companyName;}
 
     public void setIndex(int index){ this.index = index;}
     public int getIndex(){ return index;}

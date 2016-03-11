@@ -48,6 +48,7 @@ public class NewStock extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     double my_price = 0;    //store price
     double my_change = 0;   //store change
+    String my_companyName;
     int refresh = 0;
     int index = 0;
     DecimalFormat numberFormat = new DecimalFormat("0.00");
@@ -170,6 +171,7 @@ public class NewStock extends AppCompatActivity {
                     my_price = Double.parseDouble(numberFormat.format(my_price));
                     my_change = my_quote.getchange(query);
                     my_change = Double.parseDouble(numberFormat.format(my_change));
+                    my_companyName = my_quote.getname(query);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -297,16 +299,11 @@ public class NewStock extends AppCompatActivity {
             intent.putExtra("upper", upperThresh);
             intent.putExtra("lower", lowerThresh);
             intent.putExtra("refresh", refresh);
-            System.out.println(refresh);
-
-
-            //New intent info
             intent.putExtra("price", Double.toString(my_price));
             intent.putExtra("change", Double.toString(my_change));
-
-            // More new intent info
             intent.putExtra("priceVal", my_price);
             intent.putExtra("changeVal", my_change);
+            intent.putExtra("companyName", my_companyName);
 
             // Closes the old "MainActivity" once the new stock is confirmed to be created
             setResult(2);

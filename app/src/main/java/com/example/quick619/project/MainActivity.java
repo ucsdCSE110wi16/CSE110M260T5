@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     boolean mBound = false;
     Intent myService;
     Context c;
+    DecimalFormat numberFormat = new DecimalFormat("0.00");
 
 
     @Override
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 double change = stockList.get(position).getChange();
                 int refresh = stockList.get(position).getRefresh();
                 String name = stockList.get(position).getTicker();
+                String companyName = stockList.get(position).getCompanyName();
 
                 String upper = String.valueOf(upInt);
                 String lower = String.valueOf(lowInt);
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("change", change);
                 intent.putExtra("refresh", refresh);
                 intent.putExtra("name", name);
+                intent.putExtra("companyName", companyName);
                 startActivity(intent);
             }
         });
@@ -173,16 +177,19 @@ public class MainActivity extends AppCompatActivity {
         double topThresh = 0;
         if (!getIntent().getStringExtra("upper").equals("")) {
             topThresh = Double.valueOf(getIntent().getStringExtra("upper"));
+            topThresh = Double.parseDouble(numberFormat.format(topThresh));
         }
         double botThresh = 0;
         if (!getIntent().getStringExtra("lower").equals("")) {
             botThresh = Double.valueOf(getIntent().getStringExtra("lower"));
+            botThresh = Double.parseDouble(numberFormat.format(botThresh));
         }
         int refresh = getIntent().getIntExtra("refresh", 0);
         int index = stockList.size();
+        String companyName = getIntent().getStringExtra("companyName");
 
         //Then it constructs the stock with this info
-        ActiveStock sr1 = new ActiveStock(getApplicationContext(), text, priceVal, changeVal, botThresh, topThresh, refresh, index);
+        ActiveStock sr1 = new ActiveStock(text, priceVal, changeVal, botThresh, topThresh, refresh, index, companyName);
 
         //Add stock to stock list
         stockList.add(sr1);
@@ -190,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
         // Updates the SharedPreferences/persistent data right after stock creation
         StoreData(sr1);
     }
-
 
     /** Handles when the "edit stock" button (pencil) is clicked */
     public void editOnClick(View v) {
@@ -206,14 +212,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(editStock, 2);
     }
 
-
     public void buttonOnClick(View v) {
 
         Intent makeNewStock = new Intent(MainActivity.this, NewStock.class);
         startActivityForResult(makeNewStock, 2);
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

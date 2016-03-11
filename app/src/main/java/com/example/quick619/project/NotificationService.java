@@ -105,10 +105,10 @@ public class NotificationService extends Service {
                             boolean thresholdPassed;
                             ActiveStock tempStock = list.get(i);
 
-                            System.out.println(tempStock.getCurrentCount() + "/" + tempStock.getRefresh() * 2 + tempStock);
+                            System.out.println(tempStock.getCurrentCount() + "/" + tempStock.getRefresh() * 60 + tempStock);
                             tempStock.tickCurrentCount();
 
-                            if(tempStock.getCurrentCount() == tempStock.getRefresh() * sixtySECONDS){
+                            if(tempStock.getCurrentCount() >= tempStock.getRefresh() * 60){
                                 tempStock.resetCurrentCount();
                                 try {
                                     priceChanged = tempStock.PriceCheck();
@@ -126,6 +126,7 @@ public class NotificationService extends Service {
 
                             }
                         }
+                        System.out.println("------------------------------------------------------");
                     }
             }
 
@@ -147,6 +148,7 @@ public class NotificationService extends Service {
         String json = gson.toJson(activeStock);
         prefsEditor.putString("stock" + activeStock.getIndex(), json);
         prefsEditor.apply();
+
     }
 
     private void onNotify(int index){
@@ -164,7 +166,7 @@ public class NotificationService extends Service {
 
         builder = new Notification.Builder (context)
                 .setContentTitle(activeStock.getTicker())
-                .setContentText(activeStock.getTicker() + ": is at price: $" + activeStock.getPrice())
+                .setContentText(activeStock.getTicker() + ": " + activeStock.getPrice() + " , " + activeStock.getChange())
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true)

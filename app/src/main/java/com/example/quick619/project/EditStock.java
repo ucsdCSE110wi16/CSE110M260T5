@@ -59,17 +59,25 @@ public class EditStock extends AppCompatActivity {
         EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
         editLowerThresh.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(8, 2)});
 
+        String sign = "";
+        //Set color of change text
+        if (my_change > 0) {
+            text_change.setTextColor(Color.GREEN);
+            sign = "+";
+        }
+        else if (my_change == 0) {
+            text_change.setTextColor(Color.GRAY);
+            sign = "";
+        }
+        else {
+            text_change.setTextColor(Color.RED);
+            sign = "";
+        }
+
+        //Set the text fields
         text_name.setText(name);
         text_price.setText(Double.toString(my_price));
-        text_change.setText(Double.toString(my_change));
-
-        //Set color of change text
-        if (my_change > 0)
-            text_change.setTextColor(Color.GREEN);
-        else if (my_change == 0)
-            text_change.setTextColor(Color.GRAY);
-        else
-            text_change.setTextColor(Color.RED);
+        text_change.setText(sign + Double.toString(my_change));
 
         // Creates the dropdown list for the refresh rate
         Spinner refreshList = (Spinner) findViewById(R.id.notifyTime);

@@ -26,15 +26,6 @@ import java.util.Scanner;
 
 public class NewStock extends AppCompatActivity {
 
-/*    private ArrayList<String> stockList = new ArrayList<String>();
-    private ListView stockListView = (ListView) findViewById(R.id.stockList);
-    private ArrayAdapter<String> stockListAdapter=new
-            ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_list_item_1,
-            stockList);
-*/
-
     SearchView search_view;   //Search view var
     TextView text_price;      //Price text var
     TextView text_change;     //Change text var
@@ -249,6 +240,8 @@ public class NewStock extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    // Runs when the user presses the "check" button to confirm the stock's creation.
+    // Handles when the "check" button is pressed.
     public void makeNewStock(View v) {
 
         final EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
@@ -289,12 +282,15 @@ public class NewStock extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "The bottom baseline must be less than the price",
                     Toast.LENGTH_LONG).show();
         }
-
-
+        
+        // If there are no errors regarding the inputted fields, create the stock
         else {
 
             //Make the view for the stock
             Intent intent = new Intent(this, MainActivity.class);
+            
+            // Pass all of the data required to make the new stock to MainActivity.
+            // Will create the new stock in MainActivity
             intent.putExtra("name", stock_name);    //Edited by Ty, using stock name from search query
             intent.putExtra("upper", upperThresh);
             intent.putExtra("lower", lowerThresh);

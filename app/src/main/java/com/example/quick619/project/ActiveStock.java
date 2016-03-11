@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
  * Stock is in charge of holding all data corresponding to it such as price, name, change, etc.
  *
  * Edited by Sam on 2/28/2016.
- * Note: These are what the values of refresh correspond to:
  *
  */
 

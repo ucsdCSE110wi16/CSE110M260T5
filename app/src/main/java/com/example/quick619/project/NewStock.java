@@ -173,19 +173,26 @@ public class NewStock extends AppCompatActivity {
                     my_change = 0;
                 }
                 //Set the text fields for Price and Change
+
                 else {
-                    text_price.setText(Double.toString(my_price));
-                    text_change.setText(Double.toString(my_change));
+
+                    String sign = "";
+
+                    if(my_change > 0) sign = "+";
+                    text_price.setText("$" + Double.toString(my_price));
+                    text_change.setText(sign + Double.toString(my_change));
                 }
 
                 //Set color of change text
                 if (my_change > 0)
-                    text_change.setTextColor(Color.parseColor("#FF1DB318"));
+                    text_change.setTextColor(Color.GREEN);
                 else if (my_change == 0)
                     text_change.setTextColor(Color.GRAY);
                 else
                     text_change.setTextColor(Color.RED);
                 return false;
+
+
             }
         });
 

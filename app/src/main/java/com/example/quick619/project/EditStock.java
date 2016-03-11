@@ -23,9 +23,11 @@ public class EditStock extends AppCompatActivity {
     TextView text_price;      //Price text var
     TextView text_change;     //Change text var
     TextView text_name;       //Name text var
+    TextView text_companyName;  //Company Name text var
 
 
     String name;
+    String companyName;
     int refresh = 0;
     double my_price;
     double my_change;
@@ -42,6 +44,7 @@ public class EditStock extends AppCompatActivity {
 
         // Retrieving the data passed in from MainActivity
         name = getIntent().getStringExtra("name");
+        companyName = getIntent().getStringExtra("companyName");
         my_price = getIntent().getDoubleExtra("price", -1);
         my_change = getIntent().getDoubleExtra("change", -1);
         toEdit = getIntent().getIntExtra("stockNum", -1);
@@ -53,6 +56,7 @@ public class EditStock extends AppCompatActivity {
         text_name = (TextView) findViewById(R.id.stock_name);
         text_price = (TextView) findViewById(R.id.price);
         text_change = (TextView) findViewById(R.id.change);
+        text_companyName = (TextView) findViewById(R.id.cur_price_label);
 
         // Sets the edit threshold EditText fields
         EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
@@ -80,6 +84,7 @@ public class EditStock extends AppCompatActivity {
         text_name.setText(name);
         text_price.setText(Double.toString(my_price));
         text_change.setText(sign + Double.toString(my_change));
+        text_companyName.setText(companyName);
 
         // Creates the dropdown list for the refresh rate
         Spinner refreshList = (Spinner) findViewById(R.id.notifyTime);

@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.quick619.project.NewStock"
-    tools:showIn="@layout/activity_new_stock">
+    tools:showIn="@layout/activity_new_stock"
+    android:background="#232222">
 
     <EditText
         android:layout_width="wrap_content"
@@ -19,10 +20,13 @@
         android:ems="10"
         android:id="@+id/upperThresh"
         android:editable="false"
-        android:hint="Top Baseline"
         android:layout_below="@+id/curChange"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp" />
+        android:layout_marginTop="34dp"
+        android:textColor="#FFFFFF"
+        android:hint="Top Baseline"
+        android:textColorHint="#FFFFFF"
+        android:contextClickable="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -34,18 +38,22 @@
         android:hint="Bottom Baseline"
         android:layout_below="@+id/upper$"
         android:layout_alignLeft="@+id/upperThresh"
-        android:layout_alignStart="@+id/upperThresh" />
+        android:layout_alignStart="@+id/upperThresh"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/confirm"
         android:src="@mipmap/custom_check_button"
-        android:background="#ececec"
         android:onClick="makeNewStock"
         android:layout_below="@+id/notifyTime"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp"
+        android:background="#232222"
+        android:tint="#00cf23"
+        android:tintMode="add" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,7 +65,8 @@
         android:layout_toLeftOf="@+id/lowerThresh"
         android:layout_toStartOf="@+id/lowerThresh"
         android:layout_marginTop="86dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -70,7 +79,8 @@
         android:layout_toStartOf="@+id/upperThresh"
         android:layout_alignLeft="@+id/low$"
         android:layout_alignStart="@+id/low$"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:textColor="#FFFFFF" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -121,7 +131,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/searchResults"
-        android:layout_alignEnd="@+id/searchResults" />
+        android:layout_alignEnd="@+id/searchResults"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -134,7 +146,8 @@
         android:layout_alignLeft="@+id/curPrice"
         android:layout_alignStart="@+id/curPrice"
         android:layout_alignRight="@+id/searchResults"
-        android:layout_alignEnd="@+id/searchResults" />
+        android:layout_alignEnd="@+id/searchResults"
+        android:textColor="#FFFFFF" />
 
     <ListView
         android:layout_width="wrap_content"

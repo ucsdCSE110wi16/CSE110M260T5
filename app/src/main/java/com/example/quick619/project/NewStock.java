@@ -204,6 +204,7 @@ public class NewStock extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String selectedFromList = String.valueOf(search_results.getItemAtPosition(position));
+                selectedFromList = selectedFromList.substring(0, selectedFromList.indexOf(' '));
                 search_view.setQuery(selectedFromList, false);
             }
         });
@@ -212,8 +213,6 @@ public class NewStock extends AppCompatActivity {
 
     //Initialize the Search Results List
     public void initList (String pathname) throws IOException {
-
-        stopService(new Intent(this, NotificationService.class));
 
         AssetManager am = getAssets();
         InputStream file = am.open("NASDAQ.txt");

@@ -154,7 +154,7 @@ public class NotificationService extends Service {
     private void onNotify(int index){
 
         ActiveStock activeStock = list.get(index);
-        System.err.println("Notification is sending for: " + activeStock.getTicker());
+        System.out.println("Notification is sending for: " + activeStock.getTicker());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("RSSPullService");
 

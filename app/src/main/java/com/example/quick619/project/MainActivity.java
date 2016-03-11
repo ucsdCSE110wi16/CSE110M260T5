@@ -92,8 +92,18 @@ public class MainActivity extends AppCompatActivity {
 
         stockLV.setAdapter(new MyCustomBaseAdapter(this, stockList));
         stockLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            
+            /** Brings the user to the stock's information page
+             * @param a the AdapterView that controls the list of stocks
+             * @param v the View that is the list of stocks
+             * @position the clicked item's position on the list
+             * @id the id of the clicked item
+             */
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                
+                // Retrieving each individual piece of data that is relevant
+                // to the stock information screen
                 double upInt = stockList.get(position).getUpper();
                 double lowInt = stockList.get(position).getLower();
                 double price = stockList.get(position).getPrice();
@@ -105,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 String upper = String.valueOf(upInt);
                 String lower = String.valueOf(lowInt);
 
+                // Passing on the data to the stock information screen
                 Intent intent = new Intent(MainActivity.this, StockInformation.class);
                 intent.putExtra("upper", upper);
                 intent.putExtra("lower", lower);
@@ -145,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
         // Runs if the user told the app to edit the stock
         else {
 
-            //Sets the new fields (if edited)
+            // Sets the new fields (if edited). If a field is not edited, then it
+            // is not changed.
             if (!getIntent().getStringExtra("upper").equals(""))
                 toEdit.setUpper(Double.valueOf(getIntent().getStringExtra("upper")));
 
@@ -155,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
             int newRefresh = getIntent().getIntExtra("refresh", 0);
             if (newRefresh != 0)
                 toEdit.setRefresh(newRefresh);
-
 
             //Save the data
             StoreData(toEdit);
@@ -175,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
         double priceVal = getIntent().getDoubleExtra("priceVal", -1);
         double changeVal = getIntent().getDoubleExtra("changeVal", -1);
         double topThresh = 0;
+        
+        // Only gets the threshold values if they exist
         if (!getIntent().getStringExtra("upper").equals("")) {
             topThresh = Double.valueOf(getIntent().getStringExtra("upper"));
             topThresh = Double.parseDouble(numberFormat.format(topThresh));
@@ -212,12 +225,18 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(editStock, 2);
     }
 
+    /* Handles when the "add new stock" button (the plus button) is clicked */
     public void buttonOnClick(View v) {
-
         Intent makeNewStock = new Intent(MainActivity.this, NewStock.class);
         startActivityForResult(makeNewStock, 2);
     }
 
+    /* Allows the previous activity to be closed if the current "NewStock" or "EditStock"
+     * activity is completed.
+     * E.g. We start in MainActivity, then go to NewStock. If NewStock creates a new stock
+     * (i.e. the activity is completed), then the current MainActivity is closed, and NewStock
+     * creates a new MainActivity activity. If the user presses the back button, then this isn't used
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode==2){
@@ -227,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     /** Removes the stock from the app and updates the list
-     * SAM WILL UPDATE IT ONCE THE EDITSTOCK ACTIVITY IS COMPLETE
      *
      * @param position the stock's position in the stockList view (starting at 0)
      */
@@ -249,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
             editor.remove("stock" + i);
         }
 
+        // Decrement numStocks once the stock is removed
         numStocks--;
         editor.putInt("numStocks", numStocks);
 

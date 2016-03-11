@@ -37,7 +37,7 @@
         </activity>
         <activity
             android:name=".EditStock"
-            android:label="I DONT KNOW HOW TO PUT THE STOCK NAME HERE"
+            android:label="Edit Stock"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

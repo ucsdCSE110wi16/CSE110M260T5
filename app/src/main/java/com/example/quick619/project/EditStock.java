@@ -22,8 +22,10 @@ public class EditStock extends AppCompatActivity {
 
     TextView text_price;      //Price text var
     TextView text_change;     //Change text var
+    TextView text_name;       //Name text var
 
 
+    String name;
     int refresh = 0;
     double my_price;
     double my_change;
@@ -32,8 +34,13 @@ public class EditStock extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_stock);
+        setContentView(R.layout.activity_edit_stock);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        name = getIntent().getStringExtra("name");
         my_price = getIntent().getDoubleExtra("price", -1);
         my_change = getIntent().getDoubleExtra("change", -1);
         toEdit = getIntent().getIntExtra("stockNum", -1);
@@ -42,6 +49,7 @@ public class EditStock extends AppCompatActivity {
         if (toEdit == -1) { throw new IllegalArgumentException("Error: Attempting to edit an " +
                 "invalid stock."); }
 
+        text_name = (TextView) findViewById(R.id.stock_name);
         text_price = (TextView) findViewById(R.id.price);
         text_change = (TextView) findViewById(R.id.change);
 
@@ -51,6 +59,7 @@ public class EditStock extends AppCompatActivity {
         EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
         editLowerThresh.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(8, 2)});
 
+        text_name.setText(name);
         text_price.setText(Double.toString(my_price));
         text_change.setText(Double.toString(my_change));
 

@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         int stock_index = (Integer)v.getTag();
         ActiveStock toEdit = stockList.get(stock_index);
 
+        editStock.putExtra("name", toEdit.getTicker());
         editStock.putExtra("price", toEdit.getPrice());
         editStock.putExtra("change", toEdit.getChange());
         editStock.putExtra("stockNum", stock_index);

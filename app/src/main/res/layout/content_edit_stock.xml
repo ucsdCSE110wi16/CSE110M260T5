@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,27 +8,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.quick619.project.EditStock"
+    tools:showIn="@layout/activity_edit_stock"
     android:background="#232222">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/stock_name"
-        android:paddingTop="30dp"
+        android:paddingTop="10dp"
         android:textSize="50sp"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Stock Name"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textAlignment="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$"
         android:id="@+id/price"
-        android:layout_below="@+id/ticker"
+        android:layout_below="@+id/stock_name"
         android:textAlignment="center"
         android:textSize="50dp"
         android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:hint="$"
+        android:textColorHint="#FFFFFF"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,10 +87,12 @@
         android:src="@mipmap/custom_check_button"
         android:background="#232222"
         android:onClick="confirmEdit"
-        android:layout_marginBottom="98dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/lowerThresh"
-        android:layout_alignEnd="@+id/lowerThresh" />
+        android:layout_alignParentBottom="false"
+        android:layout_alignRight="@+id/notifyTime"
+        android:layout_alignEnd="@+id/lowerThresh"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/notifyTime"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -139,9 +153,8 @@
         android:background="#232222"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
-        android:scaleType="fitStart"
         android:layout_alignTop="@+id/confirmEdit"
         android:layout_toRightOf="@+id/low$"
-        android:layout_toEndOf="@+id/low$" />
+        android:layout_alignBottom="@+id/confirmEdit" />
 
 </RelativeLayout>

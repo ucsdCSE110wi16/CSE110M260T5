@@ -76,7 +76,7 @@ public class ActiveStock {
     public boolean PriceCheck() throws IOException {
         getquote quote = new getquote();
         double oldPrice = price;
-        price = quote.getprice(ticker) + 500;
+        price = quote.getprice(ticker);
         price = Double.parseDouble(numberFormat.format(price));
 
         if (oldPrice != price) {

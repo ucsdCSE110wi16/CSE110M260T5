@@ -40,6 +40,7 @@ public class EditStock extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Retrieving the data passed in from MainActivity
         name = getIntent().getStringExtra("name");
         my_price = getIntent().getDoubleExtra("price", -1);
         my_change = getIntent().getDoubleExtra("change", -1);
@@ -60,6 +61,7 @@ public class EditStock extends AppCompatActivity {
         editLowerThresh.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(8, 2)});
 
         String sign = "";
+        
         //Set color of change text
         if (my_change > 0) {
             text_change.setTextColor(Color.GREEN);
@@ -116,12 +118,13 @@ public class EditStock extends AppCompatActivity {
 
     /** Prompts the list of stocks to edit the current stock's information */
     public void confirmEdit(View v) {
+        
+        // Retrieves all the (possibly) edited data
         Intent intent = new Intent(this, MainActivity.class);
         final EditText editUpperThresh = (EditText) findViewById(R.id.upperThresh);
         final EditText editLowerThresh = (EditText) findViewById(R.id.lowerThresh);
         String upperThresh = editUpperThresh.getText().toString();
         String lowerThresh = editLowerThresh.getText().toString();
-
 
         // Makes sure lower threshold < my_price
         if (!(upperThresh.equals("") || lowerThresh.equals("")) &&
@@ -163,12 +166,14 @@ public class EditStock extends AppCompatActivity {
     public void deleteStock(View v) {
         final Intent intent = new Intent(this, MainActivity.class);
 
-        // Creates an alert message
+        // Creates an alert message to confirm the deletion
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Confirm Delete");
         alert.setMessage("Are you sure that you want to delete this stock?");
         alert.setNegativeButton("No", null);
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            
+            // Deletes the stock if the user selects the "Yes" button
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

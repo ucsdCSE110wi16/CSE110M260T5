@@ -23,7 +23,7 @@ public class StockInformation extends AppCompatActivity {
         double price = getIntent().getDoubleExtra("price", 0);
         double change = getIntent().getDoubleExtra("change", 0);
 
-
+        // Sets all of the proper TextView fields for the stock's information
         TextView name = (TextView)findViewById(R.id.tickerName);
         name.setText(updateName());
 
@@ -56,21 +56,25 @@ public class StockInformation extends AppCompatActivity {
         text_change.setText(sign + Double.toString(change));
     }
 
+    // Sets the top baseline/upper threshold's TextView text
     private String updateUpper(){
         String upper = "$" + getIntent().getStringExtra("lower");
         return upper;
     }
 
+    // Sets the bottom baseline's TextView text
     private String updateLower(){
         String lower = "$" + getIntent().getStringExtra("upper");
         return lower;
     }
 
+    // Sets the ticker name's TextView text
     private String updateName(){
         String name = getIntent().getStringExtra("name");
         return name;
     }
 
+    // Sets the stock's company name TextView text
     private String updateCompanyName(){
         String companyName = getIntent().getStringExtra("companyName");
         return companyName;

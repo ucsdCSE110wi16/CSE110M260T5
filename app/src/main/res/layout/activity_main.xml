@@ -35,6 +35,22 @@
         android:adjustViewBounds="false"
         android:background="#00ffffff"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignRight="@+id/stockList"
+        android:layout_alignEnd="@+id/stockList" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button3"
+        android:id="@+id/refresh"
+        android:onClick="resfreshOnClick"
+        android:src="@mipmap/refresh"
+        android:foregroundGravity="top"
+        android:adjustViewBounds="false"
+        android:background="#00ffffff"
+        android:layout_below="@+id/stockList"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

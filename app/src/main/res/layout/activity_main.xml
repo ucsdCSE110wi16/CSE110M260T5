@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/button3"
         android:id="@+id/refresh"
-        android:onClick="resfreshOnClick"
+        android:onClick="refreshOnClick"
         android:src="@mipmap/refresh"
         android:foregroundGravity="top"
         android:adjustViewBounds="false"

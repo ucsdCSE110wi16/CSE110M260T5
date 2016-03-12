@@ -248,6 +248,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(makeNewStock, 2);
     }
 
+    /** Handles when the "refresh button" has been clicked*/
+    public void refreshOnClick(View v) {
+        stockLV.setAdapter(new MyCustomBaseAdapter(this, stockList));
+    }
+
     /** Allows the previous activity to be closed if the current "NewStock" or "EditStock"
      * activity is completed.
      * E.g. We start in MainActivity, then go to NewStock. If NewStock creates a new stock

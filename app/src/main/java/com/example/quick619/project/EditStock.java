@@ -84,7 +84,7 @@ public class EditStock extends AppCompatActivity {
         text_name.setText(name);
         text_price.setText(Double.toString(my_price));
         text_change.setText(sign + Double.toString(my_change));
-        text_companyName.setText(companyName);
+        text_companyName.setText(companyName + "...");
 
         // Creates the dropdown list for the refresh rate
         Spinner refreshList = (Spinner) findViewById(R.id.notifyTime);

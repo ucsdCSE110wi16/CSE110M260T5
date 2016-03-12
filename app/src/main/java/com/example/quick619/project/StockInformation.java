@@ -28,7 +28,7 @@ public class StockInformation extends AppCompatActivity {
         name.setText(updateName());
 
         TextView companyName = (TextView)findViewById(R.id.companyName);
-        companyName.setText(updateCompanyName());
+        companyName.setText(updateCompanyName() + "...");
 
         TextView upper= (TextView)findViewById(R.id.upperThresh);
         upper.setText(updateUpper());

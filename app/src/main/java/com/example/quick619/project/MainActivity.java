@@ -22,21 +22,32 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     * MainActivity:
      *
+     * Purpose: Allows user to see their list of stocks
+     * Buttons: NewStock, EditStock, ViewStock
      */
     private GoogleApiClient client;
 
     ArrayList<ActiveStock> stockList = new ArrayList<>();   // Holds the list of stocks
-    int numStocks = 0;
-    NotificationService mService;
-    boolean mBound = false;
-    Intent myService;
-    Context c;
-    DecimalFormat numberFormat = new DecimalFormat("0.00");
+    int numStocks = 0;                                      // Number of stocks in the ArrayList
+    NotificationService mService;                           // NotificationService object
+    boolean mBound = false;                                 // Boolean for if Service is bounded
+    Intent myService;                                       // Intent for starting service
+    Context c;                                              // Our context
+    ListView stockLV;                                       // ListView for the stocks
+    DecimalFormat numberFormat = new DecimalFormat("0.00"); // DecimalFormatter 0.00
 
 
+    /**
+     * OnStart()
+     * @param savedInstanceState
+     *
+     * Gets the saved preferences of stocks
+     * Decides what to do depending on which activity we came from
+     * Sets up the ListView
+     * Starts the service for background stock updating
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         numStocks = preferences.getInt("numStocks", -1);
 
-
+        //Stop any previous service, then start the new service
         myService = new Intent(this, NotificationService.class);
-
         c = getApplicationContext();
         boolean boo = c.stopService(myService);
         System.out.println("Service Stopped = " + boo);
@@ -73,8 +83,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //Set up list view
         setContentView(R.layout.activity_main);
-        final ListView stockLV = (ListView) findViewById(R.id.stockList);
+        stockLV = (ListView) findViewById(R.id.stockList);
 
         // Runs if the user came from either NewStock or EditStock
         if(getIntent().getExtras() !=null) {
@@ -90,9 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 createNewStock(preferences, gson);
         }
 
+        //Initialize the listview
         stockLV.setAdapter(new MyCustomBaseAdapter(this, stockList));
         stockLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            
+
             /** Brings the user to the stock's information page
              * @param a the AdapterView that controls the list of stocks
              * @param v the View that is the list of stocks
@@ -101,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                
+
                 // Retrieving each individual piece of data that is relevant
                 // to the stock information screen
                 double upInt = stockList.get(position).getUpper();
@@ -129,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * On stop, unbind from the service
+     */
     @Override
     protected void onStop() {
         super.onStop();
@@ -227,13 +242,13 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(editStock, 2);
     }
 
-    /* Handles when the "add new stock" button (the plus button) is clicked */
+    /** Handles when the "add new stock" button (the plus button) is clicked */
     public void buttonOnClick(View v) {
         Intent makeNewStock = new Intent(MainActivity.this, NewStock.class);
         startActivityForResult(makeNewStock, 2);
     }
 
-    /* Allows the previous activity to be closed if the current "NewStock" or "EditStock"
+    /** Allows the previous activity to be closed if the current "NewStock" or "EditStock"
      * activity is completed.
      * E.g. We start in MainActivity, then go to NewStock. If NewStock creates a new stock
      * (i.e. the activity is completed), then the current MainActivity is closed, and NewStock
@@ -284,6 +299,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper method to save all new preferences
+     * @param sr1
+     */
     public void StoreData(ActiveStock sr1){
 
         //Updates the preferences by storing the given stock

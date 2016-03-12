@@ -205,6 +205,7 @@ public class NotificationService extends Service {
                             boolean thresholdPassed;
                             ActiveStock tempStock = list.get(i);
 
+
                             System.out.println(tempStock.getCurrentCount() + "/" +
                                     tempStock.getRefresh() * 60 + tempStock);
 

@@ -92,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/confirmEdit"
-        android:src="@mipmap/custom_check_button"
+        android:src="@mipmap/check_circle_green"
         android:background="#232222"
         android:onClick="confirmEdit"
         android:layout_alignParentBottom="false"
@@ -100,9 +100,7 @@
         android:layout_alignEnd="@+id/lowerThresh"
         android:layout_alignParentTop="false"
         android:layout_below="@+id/notifyTime"
-        android:layout_marginTop="20dp"
-        android:tint="#00cf23"
-        android:tintMode="add" />
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"

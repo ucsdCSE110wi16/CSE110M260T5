@@ -69,7 +69,7 @@ public class ActiveStockTest extends TestCase {
     }
 
     //Test if a change in a stock's price can be detected
-    @Test //TODO
+    @Test
     public void testPriceCheck() throws Exception {
         //Testing when there is no change in a stock's price
         err.println("[TEST SET: PriceCheck(), no changes]");
@@ -81,7 +81,6 @@ public class ActiveStockTest extends TestCase {
                 err.println("Detected price change in " + s.getTicker() + ".");
         }
 
-        //TODO: Change price of the stocks
 
         for(ActiveStock s : stocks){
             if(s.PriceCheck())
@@ -90,12 +89,11 @@ public class ActiveStockTest extends TestCase {
                 err.println("Detected price change in " + s.getTicker() + ".");
         }
 
-        //TODO: Set price back to original values
 
     }
 
     //Test if the app can detect when a stock's price passes a threshold value
-    @Test //TODO
+    @Test
     public void testThresholdCheck() throws Exception {
         //Set 1: Prices unchanged from original values
         err.println("[TEST SET: topThreshold(), original prices]");
@@ -107,8 +105,6 @@ public class ActiveStockTest extends TestCase {
                 out.println("Price of " + s.getTicker() + "  stayed within its thresholds");
         }
 
-        //TODO: Edit values of each stock so that it passes its topThreshold
-
         //Set 2: Prices pass topThreshold
         err.println("[TEST SET: topThreshold(), pass topThreshold]");
 
@@ -119,7 +115,6 @@ public class ActiveStockTest extends TestCase {
                 out.println("Price of " + s.getTicker() + "  stayed within its thresholds");
         }
 
-        //TODO: Edit values of each stock so that it passes its botThreshold
 
         //Set 3: Prices pass botThreshold
         err.println("[TEST SET: topThreshold(), pass botThreshold]");

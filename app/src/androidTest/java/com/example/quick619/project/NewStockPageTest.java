@@ -92,6 +92,7 @@ public class NewStockPageTest {
 
         for (int i = 0; i < 8; i++) {
 
+            // Opens the spinner
             onView(withId(R.id.notifyTime)).perform(click());
             String strToCheck = "";
 
@@ -123,6 +124,7 @@ public class NewStockPageTest {
                     break;
             }
 
+            // Clicks each spinner option and checks if it was selected correctly
             // http://stackoverflow.com/questions/31420839/android-espresso-check-selected-spinner-text
             onData(allOf(is(instanceOf(String.class)), is(strToCheck))).perform(click());
             onView(withId(R.id.notifyTime))

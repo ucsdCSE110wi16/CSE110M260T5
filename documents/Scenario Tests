@@ -4,14 +4,6 @@ Given the User is on the home screen
 When he/she clicks the Add stock button
 Then the screen shifts to another activity with user-inputted text fields for stock name and upper and lower baselines as well as a spinner for choosing refresh rate.
 
-Given the User is on the home screen
-When he/she clicks on the edit button of a certain stock card
-Then the screen shifts to another activity that allows the user to edit the stock’s baselines, refresh rate, or delete the stock.
-When the user clicks the delete button on the screen
-Then a window pops up to confirm whether the user wants to delete the stock
-When the user clicks the yes option
-Then the card is removed from the home screen and its backend is erased
-
 Given the user is on the edit stock screen
 When he/she enters either a new top baseline, bottom baseline and/or refresh rate and clicks the confirm button
 Then the screen shifts to the home screen and updates the newly entered baseline

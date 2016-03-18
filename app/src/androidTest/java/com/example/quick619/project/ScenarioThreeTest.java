@@ -40,7 +40,7 @@ public class ScenarioThreeTest {
     public void checkStockTest () {
         onData(instanceOf(ClipData.Item.class))
                 .inAdapterView(allOf(withId(R.id.stockList), isDisplayed()))
-                .atPosition(1)
+                .atPosition(0)
                 .check(matches(isDisplayed()));
     }
 

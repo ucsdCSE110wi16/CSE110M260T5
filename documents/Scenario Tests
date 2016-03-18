@@ -13,7 +13,7 @@ When the user clicks the yes option
 Then the card is removed from the home screen and its backend is erased
 
 Given the user is on the edit stock screen
-When he/she enters either a new top or bottom baseline and clicks the confirm button
+When he/she enters either a new top baseline, bottom baseline and/or refresh rate and clicks the confirm button
 Then the screen shifts to the home screen and updates the newly entered baseline
 
 Given the user is on the home screen

@@ -40,6 +40,7 @@ public class ScenarioThreeTest {
             MainActivity.class);
 
     @Test
+
     public void checkStockTest () throws InterruptedException {
 
         // Open the first stock
@@ -62,6 +63,4 @@ public class ScenarioThreeTest {
             Thread.sleep((long) 2000);
         }
     }
-
-
 }

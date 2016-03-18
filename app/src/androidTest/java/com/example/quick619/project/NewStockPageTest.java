@@ -15,6 +15,8 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -70,25 +72,32 @@ public class NewStockPageTest {
         onView(withId(R.id.button3)).perform(click());
     }
 
+    // Checks if all required views exist and work properly
+    @Test
+    public void checkAllViews() {
+        checkSearchViewExists();
+        checkBaselineHints();
+        checkSpinnerText();
+    }
 
     // Check if the SearchView exists
-    @Test
-    public void checkSearchViewExists() {
+    private void checkSearchViewExists() {
         onView(withId(R.id.searchView)).check(matches(isDisplayed()));
     }
 
 
-    // Check if the baseline EditText views exist with the proper hints
-    @Test
-    public void checkBaselineHints() {
+    // Check if the baseline EditText views exist with the proper hints, and check
+    // if they can be edited
+    private void checkBaselineHints() {
         onView(withId(R.id.upperThresh)).check(matches(withHint(topHint)));
+        onView(withId(R.id.upperThresh)).perform(typeText("2.00"), closeSoftKeyboard());
         onView(withId(R.id.lowerThresh)).check(matches(withHint(botHint)));
+        onView(withId(R.id.lowerThresh)).perform(typeText("1.00"), closeSoftKeyboard());
     }
 
 
     // Check if the spinner exists with the proper spinner text
-    @Test
-    public void checkSpinnerText() {
+    private void checkSpinnerText() {
 
         for (int i = 0; i < 8; i++) {
 

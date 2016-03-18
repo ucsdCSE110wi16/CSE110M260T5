@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.app.AppCompatActivity;
 import android.test.ApplicationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.EditText;
@@ -18,17 +19,11 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.pressKey;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
-import static com.example.quick619.project.CheckHint.withHint;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -69,6 +64,7 @@ public class CreateNewStockTest {
         // TODO I don't know what the id for the "magnifying glass" on the search bar is.
         // TODO we need put the proper id there to do .perform(click()), just contact Sam if confused on what to do
 
+
         // onView(withId(R.id.searchView)).perform(click());
         // onView(withId(R.id.searchView)).perform(typeText(stockName), pressKey(66));
     }
@@ -82,8 +78,7 @@ public class CreateNewStockTest {
         onView(withId(R.id.confirm)).perform(click());
 
         // Checks if the new stock is created and is in the stock list
-        // Credit to http://stackoverflow.com/questions/21604351/check-if-a-
-        // listview-has-an-specific-a-number-of-items-and-scroll-to-last-one-wi
+        // Credit to http://stackoverflow.com/questions/21604351/check-if-a-listview-has-an-specific-a-number-of-items-and-scroll-to-last-one-wi
         onData(instanceOf(ClipData.Item.class))
                 .inAdapterView(allOf(withId(R.id.stockList), isDisplayed()))
                 .atPosition(0)
